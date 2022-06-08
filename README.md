@@ -1,16 +1,21 @@
 # mslauncher
 
-A new Flutter project.
+MineCraft Server Launcher (Under Construction!)
 
-## Getting Started
+A flutter project.
 
-This project is a starting point for a Flutter application.
+It uses [cloudflared tunnel]("https://github.com/cloudflare/cloudflared").
 
-A few resources to get you started if this is your first Flutter project:
+## Getting Started 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Download the launcher from the latest release!
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+
+The launcher will only SELECTED functions :)
+
+・ Command Line
+
+・ Edit server.properties
+
+・ and easy to launch
