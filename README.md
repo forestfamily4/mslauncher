@@ -12,7 +12,7 @@ Download the launcher from the latest release!
 
 ## Features
 
-The launcher will only SELECTED functions :)
+The launcher will only have SELECTED functions :)
 
 ・ Command Line
 
