@@ -21,5 +21,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+   // w.StartRender(&a);
     return a.exec();
 }
