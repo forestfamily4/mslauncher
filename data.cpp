@@ -1,6 +1,7 @@
 #include "data.h"
 #include <string>
 #include <fstream>
+#include <QtCore/QDebug>
 using namespace std;
 Data::Data()
 {
@@ -25,6 +26,7 @@ void Data::Write(){
         result+="\n-";
     }
     fstream f;
+    qDebug()<<QString::fromStdString(result);
     f.open("serverdata",std::ios::out);
     f<<result<<endl;
     f.close();

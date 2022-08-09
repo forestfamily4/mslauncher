@@ -5,7 +5,10 @@
 #include "data.h"
 #include "commandline.h"
 #include <QApplication>
+#include "rcon.h"
 
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -29,15 +32,23 @@ private slots:
 
     void on_tabWidget_tabBarClicked(int index);
 
+    void on_comboBox_ServerProperties_currentIndexChanged(int index);
+
+    void on_lineEdit_ServerProperties_textChanged(const QString &arg1);
+
+    void on_pushButton_Command_clicked();
+
 private:
     Ui::MainWindow *ui;
     Data Data;
     CommandLineController* CommandLine_Server;
     int stdoutFileSize=0;
+    rcon rcon;
+    void Command();
+    void ErrorWindow(string info);
 public:
     int CurrentServer();
     int timerId;
-
 protected:
     void timerEvent(QTimerEvent *event);
     void closeEvent(QCloseEvent *bar);

@@ -10,8 +10,9 @@ public:
     ServerProperty();
     std::vector<vector<string>> Properties;
     void Load(string Directory);
+    void Write(string Directory);
 private:
-    void Write();
+    vector<string> split(const string &s, char delim);
 };
 
 #endif // SERVERPROPERTY_H

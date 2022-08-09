@@ -9,6 +9,8 @@
 #include <QErrorMessage>
 #include <QProcess>
 #include <QMessageBox>
+#include "rcon.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -25,6 +27,7 @@ MainWindow::~MainWindow()
 {
     killTimer(timerId);
     delete ui;
+
 }
 
 void MainWindow::on_NewServerButton_clicked()
@@ -44,6 +47,7 @@ void MainWindow::on_NewServerButton_clicked()
         ui->comboBox_Servers->addItem(QString::fromStdString(Servers[i].ServerName));
     }
     delete s;
+
 
 }
 
@@ -156,27 +160,73 @@ void MainWindow::on_comboBox_Servers_currentIndexChanged(int index)
 
 void MainWindow::on_tabWidget_tabBarClicked(int index)
 {
+
+    if(this->Data.Servers.empty()){return;}
     if(index==1){
+        qDebug()<<ui->comboBox_ServerProperties->count();
+        if(ui->comboBox_ServerProperties->count()==0){
         this->Data.Servers[CurrentServer()].ServerProperty.Load(Data.Servers[CurrentServer()].Directory);
         ServerProperty sp= this->Data.Servers[CurrentServer()].ServerProperty;
-        QWidget* s= ui->tab_2;
-        cout<<"thinking"<<endl;
-        for(int i=0;sp.Properties.size();i++){
-
-
-            QFormLayout* layout=ui->formLayout_serverproperty;
-            QLabel* q;
-            layout->addWidget(q);
-            string aa=sp.Properties[i][0];
-            cout<<aa<<endl;
-            q->setText(QString::fromStdString(aa));
-            q->setGeometry(i*30,i*30,100,30);
-            QLineEdit* l;
-            layout->addWidget(l);
-            string aaa=sp.Properties[i][1];
-            l->setText(QString::fromStdString(aaa));
-            l->setGeometry(i*30+100,i*30,100,30);
+            for(int i=0;i<sp.Properties.size();i++){
+                ui->comboBox_ServerProperties->addItem(QString::fromStdString(sp.Properties[i][0]));
+            }
         }
+    }
+
+}
+
+
+void MainWindow::on_comboBox_ServerProperties_currentIndexChanged(int index)
+{
+    ui->lineEdit_ServerProperties->setText(QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[index][1]));
+}
+
+
+void MainWindow::on_lineEdit_ServerProperties_textChanged(const QString &arg1)
+{
+    if(this->Data.Servers.empty()){return;}
+    this->Data.Servers[CurrentServer()].ServerProperty.Properties[ui->comboBox_ServerProperties->currentIndex()][1]=arg1.toStdString();
+    this->Data.Servers[CurrentServer()].ServerProperty.Write(Data.Servers[CurrentServer()].Directory);
+}
+
+/*
+void MainWindow::finished(QNetworkReply *rep)
+{
+    QByteArray bts = rep->readAll();
+    QString str(bts);
+    QMessageBox::information(this,"sal",str,"ok");
+}*/
+
+void MainWindow::on_pushButton_Command_clicked()
+{
+    Command();
+}
+void MainWindow::Command(){
+    QString command=ui->lineEdit_Command->text();
+    if(rcon.isconnected){
+        rcon.cmd(command.toStdString());
+    }
+    else{
+        string enablercon=this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
+        string rconpass= this->Data.Servers[CurrentServer()].ServerProperty.Properties[37][1];
+        QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[38][1]);
+        if(enablercon!="true"){
+            return ErrorWindow("rconが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。");
+        }
+        if(rconpass==""){
+            return ErrorWindow("rconのパスワードが空白です。serverのpropertiesの「rcon-password」に何らかのパスワードを設定してください。");
+        }
+        bool is_ok;
+        int port = rconport.toInt(&is_ok, 10);
+        if(!is_ok){
+            return ErrorWindow("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかのパスワードを設定してください。\n初期値の25565をおすすめします。");
+        }
+        rcon.auth(rconpass,port);
+        rcon.cmd(command.toStdString());
     }
 }
 
+void MainWindow::ErrorWindow(string info){
+    QErrorMessage e;
+    e.showMessage(QString::fromStdString(info));
+}
