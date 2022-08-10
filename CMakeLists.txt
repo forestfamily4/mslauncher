@@ -31,11 +31,14 @@ set(PROJECT_SOURCES
         discordsrv.h discordsrv.cpp
         icon.ico
         commandline.h commandline.cpp
-
+        icon.rc
 
              rcon.h rcon.cpp
         ${TS_FILES}
 )
+
+
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(mslauncher
@@ -48,6 +51,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+
+
 else()
     if(ANDROID)
         add_library(mslauncher SHARED
@@ -55,10 +60,16 @@ else()
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    elseif(WIN32)
+        add_executable(mslauncher
+            ${PROJECT_SOURCES}
+            icon.rc
+        )
     else()
         add_executable(mslauncher
             ${PROJECT_SOURCES}
         )
+
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

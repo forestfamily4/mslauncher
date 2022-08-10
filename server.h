@@ -5,13 +5,13 @@
 using namespace std;
 
 #include "serverproperty.h"
-typedef struct GUIOption
+ struct guiOption
 {
   bool isCommandGuess;
   string DiscordBotToken;
   string DiscordChannelId;
 };
-
+typedef guiOption GUIOption;
 class Server
 {
 public:
