@@ -18,12 +18,14 @@ class CommandLineController
 {
 public:
     CommandLineController(Server* Server,int id);
-    void EnterCommand(string Command);
     qint64 PID;
     bool HasJava();
+    int Getos();//0 win 1 mac 2 linux
+private:
+    void GenerateCMDFile(int id,Server Server,string filename,string& filenameresult);
+    void ASyncCommandLine(Server* Server,int id);
     QProcess* ThisProcess;
-    void GenerateCMDFile(int id,Server Server);
-    void SyncCommandLine(Server* Server,int id);
+
 };
 
 #endif // COMMANDLINE_H
