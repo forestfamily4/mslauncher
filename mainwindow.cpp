@@ -52,7 +52,7 @@ void MainWindow::on_NewServerButton_clicked()
 }
 
 void MainWindow::timerEvent(QTimerEvent *event){
-    ui->label_CommandLine_2->setText(QString::fromStdString(rcon.data));
+    ui->plainTextEdit_CommandResult->setPlainText(QString::fromStdString(rcon.data));
 
 
 

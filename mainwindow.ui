@@ -19,15 +19,15 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QComboBox" name="comboBox_Servers"/>
-    </item>
     <item row="0" column="1">
      <widget class="QPushButton" name="NewServerButton">
       <property name="text">
        <string>新規サーバー</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QComboBox" name="comboBox_Servers"/>
     </item>
     <item row="2" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
@@ -38,169 +38,193 @@
        <attribute name="title">
         <string>一般</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="10" column="2">
-         <widget class="QLineEdit" name="lineEdit_Command"/>
-        </item>
-        <item row="10" column="0">
-         <widget class="QLineEdit" name="lineEdit_DiscordChannelId"/>
-        </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Channelのid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="indent">
-           <number>-1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLineEdit" name="lineEdit_3"/>
-        </item>
-        <item row="7" column="2">
-         <widget class="QPushButton" name="pushButton_Command">
-          <property name="text">
-           <string>コマンド送信</string>
-          </property>
-         </widget>
-        </item>
+       <layout class="QFormLayout" name="formLayout_3">
         <item row="0" column="0">
-         <widget class="QPushButton" name="LaunchServerButton">
-          <property name="text">
-           <string>サーバー起動</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QPushButton" name="LaunchServerButton">
+            <property name="text">
+             <string>サーバー起動</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>サーバーからファイルをダウンロードしています..</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>cloudflaredリンク</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_3"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_ClipBoard">
+            <property name="text">
+             <string>クリップボードにコピー</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Botのtoken&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="indent">
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_DiscordBotToken"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Channelのid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="indent">
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_DiscordChannelId"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_Command">
+            <property name="text">
+             <string>コマンド送信</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_GuessCommand">
+            <property name="text">
+             <string>コマンド補完</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="8" column="2" rowspan="2">
-         <widget class="QCheckBox" name="checkBox_GuessCommand">
-          <property name="text">
-           <string>コマンド補完</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>サーバーからファイルをダウンロードしています..</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>cloudflaredリンク</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QLineEdit" name="lineEdit_DiscordBotToken"/>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Botのtoken&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::AutoText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="indent">
-           <number>-1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QPushButton" name="pushButton_ClipBoard">
-          <property name="text">
-           <string>クリップボードにコピー</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QProgressBar" name="progressBar">
-          <property name="value">
-           <number>24</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" rowspan="6">
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>417</width>
-             <height>801</height>
-            </rect>
-           </property>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_CommandLine">
-              <property name="midLineWidth">
-               <number>-2</number>
-              </property>
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;thinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfv&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;P</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-        <item row="6" column="2">
-         <widget class="QScrollArea" name="scrollArea_2">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents_3">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>417</width>
-             <height>794</height>
-            </rect>
-           </property>
-           <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="1">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEdit_Command"/>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_CommandLine_2">
-              <property name="midLineWidth">
-               <number>-2</number>
+             <widget class="QScrollArea" name="scrollArea">
+              <property name="widgetResizable">
+               <bool>true</bool>
               </property>
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;thinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfthinking&lt;br/&gt;ffadsfv&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;P</string>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>308</width>
+                 <height>515</height>
+                </rect>
+               </property>
+               <layout class="QFormLayout" name="formLayout">
+                <item row="1" column="1">
+                 <widget class="QLabel" name="label_CommandLine">
+                  <property name="midLineWidth">
+                   <number>-2</number>
+                  </property>
+                  <property name="text">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;サーバーのログを表示します。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QScrollArea" name="scrollArea_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
               </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAsNeeded</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAsNeeded</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents_3">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>307</width>
+                 <height>515</height>
+                </rect>
+               </property>
+               <layout class="QFormLayout" name="formLayout_2">
+                <item row="0" column="0" colspan="2">
+                 <widget class="QPlainTextEdit" name="plainTextEdit_CommandResult">
+                  <property name="plainText">
+                   <string>コマンドの結果を表示します。</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>
-          </widget>
-         </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
