@@ -38,6 +38,8 @@ private slots:
 
     void on_pushButton_Command_clicked();
 
+    void on_lineEdit_Command_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     Data Data;
@@ -46,6 +48,7 @@ private:
     rcon rcon;
     void Command();
     void ErrorWindow(string info);
+    bool IsrconStarted=false;
 public:
     int CurrentServer();
     int timerId;

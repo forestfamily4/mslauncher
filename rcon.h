@@ -14,6 +14,7 @@ public:
     void auth(string password,int port);
     void cmd(string cmd);
     bool isconnected=false;
+    string data="";
 private slots:
     void receiveData();
     void error();

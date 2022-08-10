@@ -52,6 +52,10 @@ void MainWindow::on_NewServerButton_clicked()
 }
 
 void MainWindow::timerEvent(QTimerEvent *event){
+    ui->label_CommandLine_2->setText(QString::fromStdString(rcon.data));
+
+
+
 
     if(filesystem::exists("stdout.txt")){
         std::ifstream stdoutfile;
@@ -73,6 +77,14 @@ void MainWindow::timerEvent(QTimerEvent *event){
                 cout<<Data.Servers[CurrentServer()].Directory+"/eula.txt"<<endl;
                 process.start("notepad.exe",{QString::fromStdString(Data.Servers[CurrentServer()].Directory+"/eula.txt")});
                 process.waitForFinished();
+            }
+            else {
+                if(line.find("RCON")!=std::string::npos){
+                    this->IsrconStarted=true;
+                }
+                else{
+                    this->IsrconStarted=false;
+                }
             }
         }
 
@@ -128,8 +140,9 @@ void MainWindow::closeEvent (QCloseEvent *event)
     g.DiscordChannelId=ui->lineEdit_DiscordChannelId->text().toStdString();
     g.isCommandGuess=ui->checkBox_GuessCommand->isChecked();
     */
-    this->Data.Write();
     this->CommandLine_Server->ThisProcess->kill();
+    this->Data.Write();
+
 }
 
 
@@ -201,32 +214,51 @@ void MainWindow::on_pushButton_Command_clicked()
 {
     Command();
 }
+
 void MainWindow::Command(){
+    if(!this->IsrconStarted){
+        return ErrorWindow("RCONがまだ有効ではありません。起動するまで待ってください。");
+    }
     QString command=ui->lineEdit_Command->text();
+
     if(rcon.isconnected){
         rcon.cmd(command.toStdString());
+        ui->lineEdit_Command->clear();
     }
     else{
-        string enablercon=this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
-        string rconpass= this->Data.Servers[CurrentServer()].ServerProperty.Properties[37][1];
+        this->Data.Servers[CurrentServer()].ServerProperty.Load(Data.Servers[CurrentServer()].Directory);
+        qDebug()<<"thinking";
+        string e= this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
+        QString enablercon=QString::fromStdString(e);
+        QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[37][1]);
         QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[38][1]);
+
         if(enablercon!="true"){
             return ErrorWindow("rconが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。");
         }
         if(rconpass==""){
             return ErrorWindow("rconのパスワードが空白です。serverのpropertiesの「rcon-password」に何らかのパスワードを設定してください。");
         }
-        bool is_ok;
+        bool is_ok=false;
         int port = rconport.toInt(&is_ok, 10);
+
         if(!is_ok){
             return ErrorWindow("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかのパスワードを設定してください。\n初期値の25565をおすすめします。");
         }
-        rcon.auth(rconpass,port);
-        rcon.cmd(command.toStdString());
+        qDebug()<<"port";
+        qDebug()<<port;
+        rcon.auth(rconpass.toStdString(),port);
     }
 }
 
 void MainWindow::ErrorWindow(string info){
     QErrorMessage e;
     e.showMessage(QString::fromStdString(info));
+    e.exec();
 }
+
+void MainWindow::on_lineEdit_Command_returnPressed()
+{
+    Command();
+}
+
