@@ -2,7 +2,7 @@
 
 MineCraft Server Launcher (Under Construction!)
 
-A flutter project.
+A Qt project.
 
 It uses [cloudflared tunnel]("https://github.com/cloudflare/cloudflared").
 
