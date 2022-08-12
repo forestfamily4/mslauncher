@@ -33,8 +33,8 @@ set(PROJECT_SOURCES
         back/commandline.h back/commandline.cpp
         icon.rc
         back/rcon.h back/rcon.cpp
-        back/download.h back/download.cpp
-        back/qtdownload.h back/qtdownload.cpp
+        back/downloadmanager.h back/downloadmanager.cpp
+
         ${TS_FILES}
 )
 

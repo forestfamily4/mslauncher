@@ -7,8 +7,7 @@
 #include "data/data.h"
 #include "back/commandline.h"
 #include "back/rcon.h"
-#include "back/download.h"
-#include "back/qtdownload.h"
+#include "back/downloadmanager.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>

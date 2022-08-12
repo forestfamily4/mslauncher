@@ -1,5 +1,5 @@
-#ifndef QTDOWNLOAD_H
-#define QTDOWNLOAD_H
+#ifndef QTDownloadManager_H
+#define QTDownloadManager_H
 
 #include <QObject>
 #include <QString>
@@ -8,11 +8,11 @@
 
 
 
-class QtDownload : public QObject {
+class QtDownloadManager : public QObject {
     Q_OBJECT
 public:
-    explicit QtDownload();
-    ~QtDownload();
+    explicit QtDownloadManager();
+    ~QtDownloadManager();
 
     void setTarget(const QString& t);
 
@@ -24,9 +24,9 @@ signals:
     void done();
 
 public slots:
-    void download();
-    void downloadFinished(QNetworkReply* data);
-    void downloadProgress(qint64 recieved, qint64 total);
+    void DownloadManager();
+    void DownloadManagerFinished(QNetworkReply* data);
+    void DownloadManagerProgress(qint64 recieved, qint64 total);
 };
 
 #endif

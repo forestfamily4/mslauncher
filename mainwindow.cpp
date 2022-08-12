@@ -117,11 +117,11 @@ int MainWindow::CurrentServer(){
 
 void MainWindow::on_pushButton_ClipBoard_clicked()
 {
-    //download* d=new download(this);
-    //d->downloadcloudflared();
-    QtDownload qd;
-    qd.setTarget("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
-    qd.download();
+    DownloadManager* d=new DownloadManager();
+    d->downloadcloudflared();
+    //QtDownloadManager* qd=new QtDownloadManager();
+    //qd->setTarget("https://github.com/cloudflare/cloudflared/releases/latest/DownloadManager/cloudflared-windows-amd64.exe");
+    //qd->DownloadManager();
 }
 
 void MainWindow::ClosedDelay(){
