@@ -2,13 +2,24 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "data.h"
-#include "commandline.h"
 #include <QApplication>
-#include "rcon.h"
+
+#include "data/data.h"
+#include "back/commandline.h"
+#include "back/rcon.h"
+#include "back/download.h"
+#include "back/qtdownload.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QInputDialog>
+#include <QFileDialog>
+#include <fstream>
+#include <QTimer>
+#include <QErrorMessage>
+#include <QProcess>
+#include <QMessageBox>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -49,6 +60,7 @@ private:
     void Command();
     void ErrorWindow(string info);
     bool IsrconStarted=false;
+    int rcondatasize=0;
 public:
     int CurrentServer();
     int timerId;

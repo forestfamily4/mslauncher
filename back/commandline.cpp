@@ -1,7 +1,7 @@
 #include "commandline.h"
 #include <string>
 #include <iostream>
-#include "server.h"
+#include "data/server.h"
 #include "stdio.h"
 #include <stdlib.h>
 #include <QPromise>
@@ -17,6 +17,9 @@ using namespace std;
 CommandLineController::CommandLineController(Server* Server,int id)
 {
     ASyncCommandLine(Server,id);
+}
+CommandLineController::CommandLineController(){
+
 }
 bool CommandLineController::HasJava()
 {
@@ -54,7 +57,7 @@ void CommandLineController::ASyncCommandLine(Server* Server,int id){
         ThisProcess->setWorkingDirectory(QString::fromStdString(Server->Directory));
         ThisProcess->setStandardOutputFile("stdout.txt");
         ThisProcess->setStandardErrorFile("sterr.txt");
-        ThisProcess->start("java",{"-jar","-Xmx1024M","-Xms1024M",QString::fromStdString(Server->Directory+"/server.jar"),"nogui"});;
+        ThisProcess->start("java",{"-jar","-Dfile.encoding=UTF-8","-Xmx1024M","-Xms1024M",QString::fromStdString(Server->Directory+"/server.jar"),"nogui"});;
         PID=ThisProcess->processId();
     }
     else if(id==1){

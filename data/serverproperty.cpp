@@ -1,5 +1,4 @@
 #include "serverproperty.h"
-
 #include <string>
 using namespace std;
 #include <fstream>

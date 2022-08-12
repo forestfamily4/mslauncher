@@ -24,16 +24,17 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        data.cpp
-        data.h
-        server.h server.cpp
-        serverproperty.h serverproperty.cpp
-        discordsrv.h discordsrv.cpp
+        data/data.cpp
+        data/data.h
+        data/server.h data/server.cpp
+        data/serverproperty.h data/serverproperty.cpp
+        back/discordsrv.h back/discordsrv.cpp
         icon.ico
-        commandline.h commandline.cpp
+        back/commandline.h back/commandline.cpp
         icon.rc
-
-             rcon.h rcon.cpp
+        back/rcon.h back/rcon.cpp
+        back/download.h back/download.cpp
+        back/qtdownload.h back/qtdownload.cpp
         ${TS_FILES}
 )
 

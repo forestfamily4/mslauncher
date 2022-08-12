@@ -1,15 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "commandline.h"
-#include "server.h"
-#include <QInputDialog>
-#include <QFileDialog>
-#include <fstream>
-#include <QTimer>
-#include <QErrorMessage>
-#include <QProcess>
-#include <QMessageBox>
-#include "rcon.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -52,8 +42,10 @@ void MainWindow::on_NewServerButton_clicked()
 }
 
 void MainWindow::timerEvent(QTimerEvent *event){
-    ui->plainTextEdit_CommandResult->setPlainText(QString::fromStdString(rcon.data));
-
+    if(rcon.data.length()!=this->rcondatasize){
+        ui->plainTextEdit_CommandResult->setPlainText(QString::fromStdString(rcon.data));
+    }
+   this->rcondatasize= rcon.data.length();
 
 
 
@@ -125,7 +117,11 @@ int MainWindow::CurrentServer(){
 
 void MainWindow::on_pushButton_ClipBoard_clicked()
 {
-
+    //download* d=new download(this);
+    //d->downloadcloudflared();
+    QtDownload qd;
+    qd.setTarget("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+    qd.download();
 }
 
 void MainWindow::ClosedDelay(){

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <string>
 
-#include "server.h"
+#include "data/server.h"
 #include <string>
 #include <iostream>
 #include <stdlib.h>
@@ -18,6 +18,7 @@ class CommandLineController
 {
 public:
     CommandLineController(Server* Server,int id);
+    CommandLineController();
     qint64 PID;
     bool HasJava();
     int Getos();//0 win 1 mac 2 linux
