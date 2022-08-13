@@ -6,11 +6,22 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
 
+    this->Data.Read();
     remove("stdout.txt");
     ui->setupUi(this);
     this->CommandLine_Server=nullptr;
     timerId = startTimer(200);
     IsServerRunning=false;
+    this->os=CommandLine_Server->Getos();
+    ui->comboBox_lang->addItem("Language:日本語");
+    ui->comboBox_lang->addItem("Language:English");
+    DataRender(true);
+    vector<Server> ss=this->Data.Servers;
+    for(int i=0;i<ss.size();i++){
+        qDebug()<<i<<"thinking";
+        ui->comboBox_Servers->addItem(ss[i].ServerName);
+    }
+    this->isfirst=false;
 }
 
 MainWindow::~MainWindow()
@@ -22,19 +33,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_NewServerButton_clicked()
 {
-    QString ServerName=  QInputDialog::getText(this, "サーバーの名前", "新しく作るサーバーの名前を入力してください。");
+    QString ServerName=  QInputDialog::getText(this, tr("サーバーの名前"), tr("新しく作るサーバーの名前を入力してください。"));
     if(ServerName==""){return;}
     QString Directory= QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                      "/home",
+                                      Data.DirHistory,
                                       QFileDialog::ShowDirsOnly
                                           | QFileDialog::DontResolveSymlinks);
     if(Directory==""){return;}
-    Server* s=new Server(ServerName.toStdString(),Directory.toStdString());
+    Data.DirHistory=Directory;
+    Server* s=new Server(ServerName,Directory);
     Data.Servers.push_back(*s);
     vector<Server>& Servers=Data.Servers;
     ui->comboBox_Servers->clear();
     for(int i=0;i<Servers.size();i++){
-        ui->comboBox_Servers->addItem(QString::fromStdString(Servers[i].ServerName));
+        ui->comboBox_Servers->addItem(Servers[i].ServerName);
     }
     delete s;
 
@@ -62,13 +74,16 @@ void MainWindow::timerEvent(QTimerEvent *event){
         if(stdoutFileSize!=line.length()){
             if(line.find("You need to agree to the EULA")!=std::string::npos){
                 QErrorMessage qmes;
-                qmes.showMessage("EULAに同意する必要があります。\nEULA=trueに変更して、もう一度サーバーを起動して下さい。");
+                qmes.showMessage(tr("EULAに同意する必要があります。\nEULA=trueに変更して、もう一度サーバーを起動して下さい。"));
                 qmes.exec();
                 //windowsのnotepad
-                QProcess process;
-                cout<<Data.Servers[CurrentServer()].Directory+"/eula.txt"<<endl;
-                process.start("notepad.exe",{QString::fromStdString(Data.Servers[CurrentServer()].Directory+"/eula.txt")});
-                process.waitForFinished();
+                if(this->os==0){
+                    QProcess process;
+                    process.start("notepad.exe",{Data.Servers[CurrentServer()].Directory+"/eula.txt"});
+                    process.waitForFinished();
+                }
+
+
             }
             else {
                 if(line.find("RCON")!=std::string::npos){
@@ -95,24 +110,28 @@ void MainWindow::on_LaunchServerButton_clicked()
     if(!IsServerRunning){
         if(Data.Servers.empty()){
             QErrorMessage qmes;
-            qmes.showMessage("サーバーがありません。新規サーバーで新しくサーバーを作ってください。");
+            qmes.showMessage(tr("サーバーがありません。新規サーバーで新しくサーバーを作ってください。"));
             qmes.exec();
             return;
         }
         Server& s=Data.Servers[CurrentServer()];
         this->CommandLine_Server= new CommandLineController(&s,0);
-        ui->LaunchServerButton->setText("サーバーストップ");
+        ui->LaunchServerButton->setText(tr("サーバーストップ"));
     }
     else{
-        ui->LaunchServerButton->setText("サーバー起動");
-        this->CommandLine_Server->ThisProcess->kill();
+        ui->LaunchServerButton->setText(tr("サーバー起動"));
+        this->CommandLine_Server->kill();
         remove("stdout.txt");
     }
     IsServerRunning=!IsServerRunning;
 }
 
 int MainWindow::CurrentServer(){
-   return ui->comboBox_Servers->currentIndex();
+    int a=ui->comboBox_Servers->currentIndex();
+    if(a<0){
+        a=0;
+    }
+    return a;
 }
 
 void MainWindow::on_pushButton_ClipBoard_clicked()
@@ -136,18 +155,20 @@ void MainWindow::closeEvent (QCloseEvent *event)
     g.DiscordChannelId=ui->lineEdit_DiscordChannelId->text().toStdString();
     g.isCommandGuess=ui->checkBox_GuessCommand->isChecked();
     */
-    this->CommandLine_Server->ThisProcess->kill();
+    SaveGUIOption();
+    Data.langindex=ui->comboBox_lang->currentIndex();
     this->Data.Write();
-
+    this->CommandLine_Server->kill();
 }
 
 
 
 
 void MainWindow::ChangeServerToRender(){
+
     if(IsServerRunning){
         QMessageBox e;
-       int Answer= QMessageBox::question(this,"確認","すでにサーバーが起動しています。終了しますか？");
+        int Answer= QMessageBox::question(this,tr("確認"),tr("すでにサーバーが起動しています。終了しますか？"));
         if(Answer==QMessageBox::Ok){
            on_LaunchServerButton_clicked();
        }
@@ -163,7 +184,13 @@ void MainWindow::ChangeServerToRender(){
 
 void MainWindow::on_comboBox_Servers_currentIndexChanged(int index)
 {
+    if(index==-1){
+        return;
+    }
+    SaveGUIOption();
     ChangeServerToRender();
+    DataRender(false);
+    ServerIndex=index;
 }
 
 
@@ -213,7 +240,7 @@ void MainWindow::on_pushButton_Command_clicked()
 
 void MainWindow::Command(){
     if(!this->IsrconStarted){
-        return ErrorWindow("RCONがまだ有効ではありません。起動するまで待ってください。");
+        return ErrorWindow(tr("RCONがまだ有効ではありません。起動するまで待ってください。"));
     }
     QString command=ui->lineEdit_Command->text();
 
@@ -223,23 +250,22 @@ void MainWindow::Command(){
     }
     else{
         this->Data.Servers[CurrentServer()].ServerProperty.Load(Data.Servers[CurrentServer()].Directory);
-        qDebug()<<"thinking";
         string e= this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
         QString enablercon=QString::fromStdString(e);
         QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[37][1]);
         QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[38][1]);
 
         if(enablercon!="true"){
-            return ErrorWindow("rconが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。");
+            return ErrorWindow(tr("RCONが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。"));
         }
         if(rconpass==""){
-            return ErrorWindow("rconのパスワードが空白です。serverのpropertiesの「rcon-password」に何らかのパスワードを設定してください。");
+            return ErrorWindow(tr("RCONのパスワードが空白です。serverのpropertiesの「rcon-password」に何らかのパスワードを設定してください。"));
         }
         bool is_ok=false;
         int port = rconport.toInt(&is_ok, 10);
 
         if(!is_ok){
-            return ErrorWindow("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかのパスワードを設定してください。\n初期値の25565をおすすめします。");
+            return ErrorWindow(tr("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかの整数を設定してください。\n初期値の25565をおすすめします。"));
         }
         qDebug()<<"port";
         qDebug()<<port;
@@ -247,14 +273,46 @@ void MainWindow::Command(){
     }
 }
 
-void MainWindow::ErrorWindow(string info){
+void MainWindow::ErrorWindow(QString info){
     QErrorMessage e;
-    e.showMessage(QString::fromStdString(info));
+    e.showMessage(info);
     e.exec();
 }
 
 void MainWindow::on_lineEdit_Command_returnPressed()
 {
     Command();
+}
+
+void MainWindow::SaveGUIOption(){
+   GUIOption &g= Data.Servers[ServerIndex].GUIOptions;
+    g.DiscordBotToken=ui->lineEdit_DiscordBotToken->text();
+   g.DiscordChannelId=ui->lineEdit_DiscordChannelId->text();
+    g.isCommandGuess=ui->checkBox_GuessCommand->isChecked();
+}
+
+
+void MainWindow::DataRender(bool isfirst){
+    vector<Server> ss=this->Data.Servers;
+    Server s=Server("","");
+    if(!isfirst){
+    s=ss[CurrentServer()];
+    }
+    else{
+        s=ss[0];
+        ui->comboBox_lang->setCurrentIndex(Data.langindex);
+    }
+    GUIOption g=s.GUIOptions;
+
+
+    ui->lineEdit_DiscordBotToken->setText(g.DiscordBotToken);
+    ui->lineEdit_DiscordChannelId->setText(g.DiscordChannelId);
+    ui->checkBox_GuessCommand->setChecked(g.isCommandGuess);
+}
+
+void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
+{
+    if(isfirst){return;}
+    ErrorWindow("言語を変えるにはこのアプリを再起動する必要があります。\nYou need to restart this app to change the language.");
 }
 

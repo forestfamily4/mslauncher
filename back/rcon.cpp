@@ -63,7 +63,7 @@ void rcon::receiveData()
     if(pidd==rcv_bytes){
         isconnected=true;
         qDebug("Authできました。");
-        rcv_data="RCON接続できました。";
+        rcv_data=tr("RCON接続できました。");
     }
     cout<<"test"<<endl;
     qDebug()<<rcv_bytes;

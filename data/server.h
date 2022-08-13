@@ -2,22 +2,24 @@
 #define SERVER_H
 
 #include <string>
+#include <QString>
 using namespace std;
 
 #include "serverproperty.h"
  struct guiOption
 {
-  bool isCommandGuess;
-  string DiscordBotToken;
-  string DiscordChannelId;
+ public:
+    bool isCommandGuess;
+  QString DiscordBotToken;
+  QString DiscordChannelId;
 };
 typedef guiOption GUIOption;
 class Server
 {
 public:
-  Server(string ServerName,string Directory);
-  string ServerName;
-  string Directory;
+  Server(QString ServerName,QString Directory);
+  QString ServerName;
+  QString Directory;
   ServerProperty ServerProperty;
    GUIOption GUIOptions;
 };

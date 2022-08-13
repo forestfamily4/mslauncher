@@ -22,8 +22,10 @@ public:
     qint64 PID;
     bool HasJava();
     int Getos();//0 win 1 mac 2 linux
-    QProcess* ThisProcess;
+    void kill();
 private:
+    bool isrunning=false;
+    QProcess* ThisProcess;
     void GenerateCMDFile(int id,Server Server,string filename,string& filenameresult);
     void ASyncCommandLine(Server* Server,int id);
 

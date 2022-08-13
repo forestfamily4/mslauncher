@@ -12,9 +12,9 @@ ServerProperty::ServerProperty()
 
 
 
-void ServerProperty::Load(string Directory){
+void ServerProperty::Load(QString Directory){
     std::ifstream stdoutfile;
-    stdoutfile.open(Directory+"/server.properties");
+    stdoutfile.open((Directory+"/server.properties").toStdString());
     string linebuffer="";
     int i=0;
     Properties.clear();
@@ -28,9 +28,9 @@ void ServerProperty::Load(string Directory){
     stdoutfile.close();
 }
 
-void ServerProperty::Write(string Directory){
+void ServerProperty::Write(QString Directory){
     ofstream file;
-    file.open(Directory+"/server.properties", std::ios::out);
+    file.open((Directory+"/server.properties").toStdString(), std::ios::out);
 
     string result="";
 

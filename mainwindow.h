@@ -50,16 +50,27 @@ private slots:
 
     void on_lineEdit_Command_returnPressed();
 
+    void on_comboBox_lang_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     Data Data;
     CommandLineController* CommandLine_Server;
-    int stdoutFileSize=0;
+    int os=0;
     rcon rcon;
+
+
     void Command();
-    void ErrorWindow(string info);
+    void ErrorWindow(QString info);
+    void SaveGUIOption();
+    void DataRender(bool isfirst);
+
+    //temp value
+    int ServerIndex=0;
+    int stdoutFileSize=0;
     bool IsrconStarted=false;
     int rcondatasize=0;
+    bool isfirst=true;
 public:
     int CurrentServer();
     int timerId;
@@ -70,6 +81,7 @@ protected:
     QTimer* closedtimer;
     void ChangeServerToRender();
     bool IsServerRunning;
+
 };
 #endif // MAINWINDOW_H
 

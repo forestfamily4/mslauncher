@@ -1,53 +1,71 @@
 #include "data.h"
-#include <string>
-#include <fstream>
-#include <QtCore/QDebug>
-using namespace std;
+#include <QTextCodec>
+
 Data::Data()
 {
 
 }
 void Data::Read(){
 
+    QSettings* settings=new QSettings("mslauncher.ini", QSettings::IniFormat);
+
+    settings->beginGroup("General");
+    this->langindex=settings->value("lang",0).toInt();
+    this->DirHistory=settings->value("DirHistory","").toString();
+    this->ServerNum=settings->value("ServerNum",0).toInt();
+    qDebug()<<ServerNum;
+    settings->endGroup();
+
+    for(int i=0;i<this->ServerNum;i++){
+        settings->beginGroup("Server"+QString::number(i));
+
+        QString name= settings->value("ServerName","").toString();
+        QString dir= settings->value("Directory","").toString();
+
+        qDebug()<<name;
+
+        Server* s=new Server(name,dir);
+        GUIOption* g=new GUIOption();
+        QString token= settings->value("DiscordBotToken","").toString();
+        QString channel=settings->value("DiscordChannelId","").toString();
+        bool guess=settings->value("CommandGuess",true).toBool();
+        g->DiscordChannelId=channel;
+        g->isCommandGuess=guess;
+        g->DiscordBotToken=token;
+        settings->endGroup();
+        s->GUIOptions=*g;
+        this->Servers.push_back(*s);
+    }
+
+
+
+
+
+
 }
 void Data::Write(){
-    string result="-";
-    for(int i=0;i<this->Servers.size();i++){
-        Server& s=Servers[i];
-        string name=s.ServerName;
-        string dir=s.Directory;
-        GUIOption g= s.GUIOptions;
+    QSettings* settings=new QSettings("mslauncher.ini", QSettings::IniFormat);
 
-        vector<string> gdata={g.DiscordBotToken,g.DiscordChannelId,BoolToString(g.isCommandGuess)};
-        result+=(name+"\n"+dir);
-        for(int ii=0;i<gdata.size();ii++){
-            result+=gdata[ii]+"\n";
-        }
-        result+="\n-";
-    }
-    fstream f;
-    qDebug()<<QString::fromStdString(result);
-    f.open("serverdata",std::ios::out);
-    f<<result<<endl;
-    f.close();
-}
+    this->ServerNum=this->Servers.size();
 
-string Data:: BoolToString(bool a){
-    if(a){
-        return "0";
+    settings->beginGroup("General");
+    settings->setValue("lang",langindex);
+    settings->setValue("DirHistory",DirHistory);
+    settings->setValue("ServerNum",this->ServerNum);
+    settings->endGroup();
+
+    for(int i=0;i<Servers.size();i++){
+        Server* s=&Servers[i];
+        settings->beginGroup("Server"+QString::number(i));
+        settings->setValue("ServerName",s->ServerName);
+        settings->setValue("Directory",s->Directory);
+        //guioption
+        GUIOption &g=s->GUIOptions;
+        settings->setValue("DiscordBotToken",g.DiscordBotToken);
+        settings->setValue("DiscordChannelId",g.DiscordChannelId);
+        settings->setValue("CommandGuess",g.isCommandGuess);
+
+        settings->endGroup();
     }
-    else{
-        return "1";
-    }
-}
-bool Data::StringToBool(string s){
-    if(s=="0"){
-        return true;
-    }
-    else if(s=="1"){
-        return false;
-    }
-    else{
-        return false;
-    }
+    settings->sync();
 }

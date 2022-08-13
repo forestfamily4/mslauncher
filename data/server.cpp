@@ -2,13 +2,11 @@
 #include <string>
 using namespace std;
 
-Server::Server(string ServerName, string Directory)
+Server::Server(QString ServerName, QString Directory)
 {
   this->ServerName = ServerName;
   this->Directory = Directory;
-  GUIOption g;
-  g.DiscordBotToken = "";
-  g.DiscordChannelId = "";
-  g.isCommandGuess = true;
-  this->GUIOptions = g;
+  this->GUIOptions.DiscordBotToken="";
+  this->GUIOptions.DiscordChannelId="";
+  this->GUIOptions.isCommandGuess=true;
 }

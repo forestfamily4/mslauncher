@@ -29,7 +29,7 @@ void CommandLineController::GenerateCMDFile(int id,Server Server,string filename
     std::ofstream file;
     string content="";
     if(id==0){//BuildServer
-        content+="cd "+Server.Directory;
+        content+="cd "+Server.Directory.toStdString();
         content+="\n java -Xmx1024M -Xms1024M -jar server.jar nogui";
     }
 
@@ -43,7 +43,6 @@ void CommandLineController::GenerateCMDFile(int id,Server Server,string filename
         filename+=".sh";
     }
     filenameresult=filename;
-    cout<<filename<<endl;
     file.open(filename);
     file<< content<< endl;
     file.close();
@@ -53,11 +52,12 @@ void CommandLineController::ASyncCommandLine(Server* Server,int id){
     string CommandFile;
     if(id==0){
         //GenerateCMDFile(0,*Server,"buildserver",CommandFile);
+        isrunning=true;
         ThisProcess=new QProcess();
-        ThisProcess->setWorkingDirectory(QString::fromStdString(Server->Directory));
+        ThisProcess->setWorkingDirectory(Server->Directory);
         ThisProcess->setStandardOutputFile("stdout.txt");
         ThisProcess->setStandardErrorFile("sterr.txt");
-        ThisProcess->start("java",{"-jar","-Dfile.encoding=UTF-8","-Xmx1024M","-Xms1024M",QString::fromStdString(Server->Directory+"/server.jar"),"nogui"});;
+        ThisProcess->start("java",{"-jar","-Dfile.encoding=UTF-8","-Xmx1024M","-Xms1024M",Server->Directory+"/server.jar","nogui"});;
         PID=ThisProcess->processId();
     }
     else if(id==1){
@@ -67,6 +67,13 @@ void CommandLineController::ASyncCommandLine(Server* Server,int id){
         */
     }
 }
+
+void CommandLineController::kill(){
+    if(isrunning){
+        ThisProcess->kill();
+    }
+}
+
 #ifdef Q_OS_WIN
 int CommandLineController::Getos(){//0 win 1 mac 2 linux 3 None
     return 0;

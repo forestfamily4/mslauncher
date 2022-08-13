@@ -17,7 +17,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt6 REQUIRED COMPONENTS Network)
 
 
-set(TS_FILES mslauncher_ja_JP.ts)
+set(TS_FILES
+        lang/ja.ts
+        lang/en.ts
+    )
 
 set(PROJECT_SOURCES
         main.cpp
@@ -78,6 +81,8 @@ endif()
 
 target_link_libraries(mslauncher PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(mslauncher PRIVATE Qt6::Network)
+find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
+target_link_libraries(mslauncher PRIVATE Qt6::Core5Compat)
 set_target_properties(mslauncher PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

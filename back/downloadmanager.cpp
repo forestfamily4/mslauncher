@@ -11,7 +11,7 @@ DownloadManager::DownloadManager() :
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(DownloadFinished(QNetworkReply*)));
 
     this->progresswindow=new QWidget();
-    this->progresswindow->setFixedSize(600,70);
+    this->progresswindow->setFixedSize(600,50);
     this->progresswindow->setWindowFlag(Qt::WindowStaysOnTopHint,true);
     this->progresswindow->setWindowFlag(Qt::WindowCloseButtonHint,false);
     this->progresswindow->setWindowFlag(Qt::WindowMinimizeButtonHint,false);
@@ -50,12 +50,13 @@ void DownloadManager::FileDownload(QString dir,QString url,QString filename){
 
     QNetworkRequest request(this->url);
     QObject::connect(manager.get(request), SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
-
+this->progresswindow->setWindowTitle("Downloading "+this->filename);
     this->progresswindow->show();
     isdownloading=true;
 }
 void DownloadManager::DownloadFinished(QNetworkReply *data) {
-    this->progressbar->setFormat("ファイルを書き込んでいます....");
+    this->progressbar->setFormat(tr("ファイルを書き込んでいます...."));
+
     QFile localFile(this->dir+"/"+this->filename);
     if (!localFile.open(QIODevice::WriteOnly))
         return;
@@ -77,5 +78,5 @@ void DownloadManager::DownloadProgress(qint64 recieved, qint64 total) {
     QString percent=QString::number(division)  +"%";
 
     this->progressbar->setValue(round(division));
-    this->progressbar->setFormat("\nダウンロードしています..."+percent);
+    this->progressbar->setFormat(tr("\nダウンロードしています...")+percent);
 }

@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <QtCore/QDebug>
+#include <QSettings>
 using namespace std;
 
 #include "server.h"
@@ -18,9 +21,10 @@ public:
     vector<Server> Servers;
     void Read();
     void Write();
-protected:
-    bool StringToBool(string s);
-    string BoolToString(bool a);
+    int langindex=0;
+    QString DirHistory="";
+private:
+    int ServerNum=0;
 };
 
 #endif // DATA_H

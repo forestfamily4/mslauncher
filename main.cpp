@@ -3,24 +3,30 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QDebug>
+#include "data/data.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "mslauncher_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
+    Data* d=new Data();
+    d->Read();
+    qDebug()<<"dfaf";
+    qDebug()<<d->langindex;
+    if(d->langindex==0){
+        translator.load("lang/ja");
     }
+    else{
+        translator.load("lang/en");
+    }
+    a.installTranslator(&translator);
     a.setWindowIcon(QIcon("icon.ico"));
 
     MainWindow w;
+
     w.show();
-   // w.StartRender(&a);
+    delete d;
     return a.exec();
 }
