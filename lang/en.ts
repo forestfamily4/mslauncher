@@ -12,7 +12,7 @@
         <location filename="../back/downloadmanager.cpp" line="81"/>
         <source>
 ダウンロードしています...</source>
-        <translation>downloading task is finished...</translation>
+        <translation>downloading task has finished...</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@
     <message>
         <location filename="../mainwindow.ui" line="74"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Botのtoken&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Bot token&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Bot&apos;s token&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="93"/>
@@ -81,7 +81,7 @@
     <message>
         <location filename="../mainwindow.ui" line="225"/>
         <source>設定</source>
-        <translation>Setting</translation>
+        <translation>Settings</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="247"/>
@@ -96,7 +96,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="25"/>
         <source>新しく作るサーバーの名前を入力してください。</source>
-        <translation>Input the new server name.</translation>
+        <translation>Input new server name.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="27"/>
@@ -113,7 +113,7 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../mainwindow.cpp" line="98"/>
         <source>サーバーがありません。新規サーバーで新しくサーバーを作ってください。</source>
-        <translation>There&apos;s no servers. Create a new server on &quot;Create New Server&quot; button.</translation>
+        <translation>There&apos;s no available servers. Create a new server by clicking &quot;Create New Server&quot; button.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="104"/>
@@ -123,17 +123,17 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../mainwindow.cpp" line="150"/>
         <source>確認</source>
-        <translation>Caution</translation>
+        <translation>Confirm</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="150"/>
         <source>すでにサーバーが起動しています。終了しますか？</source>
-        <translation>There is already the running server. Stop the Server?</translation>
+        <translation>There is already running server. Stop the Server?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="216"/>
         <source>RCONがまだ有効ではありません。起動するまで待ってください。</source>
-        <translation>RCON is still invalid. Please wait for the server to launch completely.</translation>
+        <translation>RCON is not still valid. Please wait for the server until launch completely.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="233"/>
@@ -149,7 +149,7 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
         <location filename="../mainwindow.cpp" line="242"/>
         <source>サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかのパスワードを設定してください。
 初期値の25565をおすすめします。</source>
-        <translation>The port of the server can&apos;t apply to integer. You need to set the value of the server property, &quot;rcon-port&quot;, which is integer. Its default value is 25565.</translation>
+        <translation>The port of the server can&apos;t apply to integer. You need to set the value of the server property, &quot;rcon-port&quot;, integer. Its default value is 25565.(recommend)</translation>
     </message>
 </context>
 </TS>
