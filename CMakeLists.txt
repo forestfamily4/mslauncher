@@ -18,8 +18,8 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 
 
 set(TS_FILES
-        lang/ja.ts
-        lang/en.ts
+        res/lang/ja.ts
+        res/lang/en.ts
     )
 
 set(PROJECT_SOURCES
@@ -32,7 +32,6 @@ set(PROJECT_SOURCES
         data/server.h data/server.cpp
         data/serverproperty.h data/serverproperty.cpp
         back/discordsrv.h back/discordsrv.cpp
-        icon.ico
         back/commandline.h back/commandline.cpp
         icon.rc
         back/rcon.h back/rcon.cpp
