@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <QString>
+#include <QDebug>
 using namespace std;
 
 class ServerProperty
@@ -12,6 +13,7 @@ public:
     std::vector<vector<string>> Properties;
     void Load(QString Directory);
     void Write(QString Directory);
+    string Get(string key);
 private:
     vector<string> split(const string &s, char delim);
 };

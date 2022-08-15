@@ -14,11 +14,8 @@
 using namespace std;
 
 
-CommandLineController::CommandLineController(Server* Server,int id)
+CommandLineController::CommandLineController()
 {
-    ASyncCommandLine(Server,id);
-}
-CommandLineController::CommandLineController(){
 
 }
 bool CommandLineController::HasJava()
@@ -48,23 +45,32 @@ void CommandLineController::GenerateCMDFile(int id,Server Server,string filename
     file.close();
 }
 
-void CommandLineController::ASyncCommandLine(Server* Server,int id){
+/**
+ *id
+ *0 java server 起動
+ *1 cloudflare
+*/
+
+void CommandLineController::Command(Server* Server,int id,QString port){
     string CommandFile;
+    isrunning=true;
+    QDateTime q;
+    this->stdoutfilepath=QDir::currentPath()+"/temp/stdout"+QString::number(rand())+q.currentDateTime().toString("hhmmss") +".txt";
     if(id==0){
         //GenerateCMDFile(0,*Server,"buildserver",CommandFile);
         isrunning=true;
         ThisProcess=new QProcess();
         ThisProcess->setWorkingDirectory(Server->Directory);
-        ThisProcess->setStandardOutputFile("stdout.txt");
-        ThisProcess->setStandardErrorFile("sterr.txt");
-        ThisProcess->start("java",{"-jar","-Dfile.encoding=UTF-8","-Xmx1024M","-Xms1024M",Server->Directory+"/server.jar","nogui"});;
-        PID=ThisProcess->processId();
+        ThisProcess->setStandardOutputFile(stdoutfilepath);
+        ThisProcess->start("java",{"-jar","-Dfile.encoding=UTF-8","-Xmx1024M","-Xms1024M",Server->Directory+"/server.jar","nogui"});
     }
     else if(id==1){
-        /*
-        CommandFile="tekitou";
-        GenerateCMDFile(0,*Server,CommandFile);
-        */
+        //macで動くかは知らぬ
+        isrunning=true;
+        ThisProcess=new QProcess();
+        ThisProcess->setWorkingDirectory(QDir::currentPath());
+        ThisProcess->setStandardErrorFile(stdoutfilepath);
+        ThisProcess->start("cloudflared",{"tunnel","--url", "tcp://localhost:"+port});
     }
 }
 
@@ -72,6 +78,7 @@ void CommandLineController::kill(){
     if(isrunning){
         ThisProcess->kill();
     }
+
 }
 
 #ifdef Q_OS_WIN

@@ -57,3 +57,12 @@ vector<string> ServerProperty:: split(const string &s, char delim) {
     }
     return elems;
 }
+
+string ServerProperty::Get(string key){
+    for(int i=0;i<this->Properties.size();i++){
+        if(key==this->Properties[i][0]){
+            return this->Properties[i][1];
+        }
+    }
+    return "none";
+}

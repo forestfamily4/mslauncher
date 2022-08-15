@@ -8,6 +8,8 @@
 #include "back/commandline.h"
 #include "back/rcon.h"
 #include "back/downloadmanager.h"
+#include "net/forge.h"
+#include "ui/comboboxwindow.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -18,6 +20,9 @@
 #include <QErrorMessage>
 #include <QProcess>
 #include <QMessageBox>
+#include <QRegExp>
+#include <QClipboard>
+#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -56,8 +61,10 @@ private:
     Ui::MainWindow *ui;
     Data Data;
     CommandLineController* CommandLine_Server;
+    CommandLineController* CommandLine_cloudflared;
     int os=0;
     rcon rcon;
+    QString cloudflaredlink="";
 
 
     void Command();
@@ -71,6 +78,7 @@ private:
     bool IsrconStarted=false;
     int rcondatasize=0;
     bool isfirst=true;
+    bool iscloudflaredlinkexists=false;
 public:
     int CurrentServer();
     int timerId;

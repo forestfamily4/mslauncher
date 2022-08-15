@@ -9,6 +9,9 @@
 #include <QProgressBar>
 #include <string>
 #include <QLayout>
+#include <QTimer>
+#include <QEventLoop>
+
 using namespace std;
 class DownloadManager:public QObject
 {
@@ -34,11 +37,11 @@ private:
     QNetworkAccessManager manager;
     QString target;
 
-signals:
+    signals:
     void done();
 
 public slots:
-    void FileDownload(QString dir,QString url,QString filename);
+    void FileDownload(QString dir,QString url,QString filename,bool downloadingdialog=true);
     void DownloadFinished(QNetworkReply* data);
     void DownloadProgress(qint64 recieved, qint64 total);
 };

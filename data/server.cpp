@@ -10,3 +10,6 @@ Server::Server(QString ServerName, QString Directory)
   this->GUIOptions.DiscordChannelId="";
   this->GUIOptions.isCommandGuess=true;
 }
+void Server::LoadProperties(){
+    this->ServerProperty.Load(this->Directory);
+}

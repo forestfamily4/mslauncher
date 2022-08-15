@@ -40,7 +40,7 @@ void DownloadManager::downloadcloudflared(){
     }
 }
 
-void DownloadManager::FileDownload(QString dir,QString url,QString filename){
+void DownloadManager::FileDownload(QString dir,QString url,QString filename,bool downloadingdialog){
     if(dir.toStdString()==""){
         dir=QDir::currentPath();
     }
@@ -50,13 +50,18 @@ void DownloadManager::FileDownload(QString dir,QString url,QString filename){
 
     QNetworkRequest request(this->url);
     QObject::connect(manager.get(request), SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
-this->progresswindow->setWindowTitle("Downloading "+this->filename);
+
+    this->progresswindow->setWindowTitle("Downloading "+this->filename);
+    if(!downloadingdialog){
+        return;
+    }
     this->progresswindow->show();
     isdownloading=true;
 }
 void DownloadManager::DownloadFinished(QNetworkReply *data) {
-    this->progressbar->setFormat(tr("ファイルを書き込んでいます...."));
 
+    this->progressbar->setFormat(tr("ファイルを書き込んでいます...."));
+    qDebug()<<this->dir+"/"+this->filename;
     QFile localFile(this->dir+"/"+this->filename);
     if (!localFile.open(QIODevice::WriteOnly))
         return;
@@ -65,6 +70,7 @@ void DownloadManager::DownloadFinished(QNetworkReply *data) {
     localFile.close();
     this->progresswindow->hide();
     isdownloading=false;
+    emit done();
 }
 
 

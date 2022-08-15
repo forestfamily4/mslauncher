@@ -1,15 +1,16 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-
+    this->CommandLine_Server=new CommandLineController();
+    this->CommandLine_cloudflared=new CommandLineController();
     this->Data.Read();
     remove("stdout.txt");
     ui->setupUi(this);
-    this->CommandLine_Server=nullptr;
     timerId = startTimer(200);
     IsServerRunning=false;
     this->os=CommandLine_Server->Getos();
@@ -18,10 +19,17 @@ MainWindow::MainWindow(QWidget *parent)
     DataRender(true);
     vector<Server> ss=this->Data.Servers;
     for(int i=0;i<ss.size();i++){
-        qDebug()<<i<<"thinking";
         ui->comboBox_Servers->addItem(ss[i].ServerName);
     }
     this->isfirst=false;
+
+    QDir d("temp");
+    if(d.exists()){
+        d.removeRecursively();
+    }
+    QDir a;
+    a.mkdir("temp");
+
 }
 
 MainWindow::~MainWindow()
@@ -50,7 +58,10 @@ void MainWindow::on_NewServerButton_clicked()
     }
     delete s;
 
-
+    ComboBoxWindow* c=new ComboBoxWindow(this,{"official","mohist","papermc","fabric","forge"});
+    c->setFixedSize(500,70);
+    c->setWindowTitle(tr("サーバーの種類を決めてください。"));
+    c->show();
 }
 
 void MainWindow::timerEvent(QTimerEvent *event){
@@ -60,19 +71,15 @@ void MainWindow::timerEvent(QTimerEvent *event){
    this->rcondatasize= rcon.data.length();
 
 
-
-    if(filesystem::exists("stdout.txt")){
-        std::ifstream stdoutfile;
-        stdoutfile.open("stdout.txt");
-        string line="";
-        string linebuffer="";
-        while(getline(stdoutfile,linebuffer)){
-            line+="\n"+linebuffer;
-        }
-        ui->label_CommandLine->setText(QString::fromStdString(line));
+   if(CommandLine_Server->isrunning){
+   if(QFile::exists(CommandLine_Server->stdoutfilepath)){
+       QFile f=QFile(CommandLine_Server->stdoutfilepath);
+       f.open(QIODevice::ReadOnly);
+       QString line= f.readAll();
+        ui->label_CommandLine->setText(line);
 
         if(stdoutFileSize!=line.length()){
-            if(line.find("You need to agree to the EULA")!=std::string::npos){
+            if(line.contains("You need to agree to the EULA")){
                 QErrorMessage qmes;
                 qmes.showMessage(tr("EULAに同意する必要があります。\nEULA=trueに変更して、もう一度サーバーを起動して下さい。"));
                 qmes.exec();
@@ -86,21 +93,51 @@ void MainWindow::timerEvent(QTimerEvent *event){
 
             }
             else {
-                if(line.find("RCON")!=std::string::npos){
+                if(line.contains("RCON")){
                     this->IsrconStarted=true;
                 }
                 else{
                     this->IsrconStarted=false;
                 }
+
+                if(line.contains("Done")){
+                    if(this->CommandLine_cloudflared->isrunning==true){
+                        return;
+                    }
+                    this->CommandLine_cloudflared->kill();
+                    this->CommandLine_cloudflared=new CommandLineController();
+                    Server& s=Data.Servers[CurrentServer()];
+                    s.LoadProperties();
+                    string port=s.ServerProperty.Get("query.port");
+                    this->CommandLine_cloudflared->Command(&s,1,QString::fromStdString(port));
+                }
             }
+
         }
 
 
 
         stdoutFileSize=line.length();
+        f.close();
     }
 
-
+   if(QFile(this->CommandLine_cloudflared->stdoutfilepath).exists()&&!this->iscloudflaredlinkexists){
+        QFile f=QFile(CommandLine_cloudflared->stdoutfilepath);
+        f.open(QIODevice::ReadOnly);
+        QString line= f.readAll();
+        if(line.contains("Your quick Tunnel has been created!")){
+            int index=line.indexOf("Your quick Tunnel has been created!");
+            QString a=line.mid(index,300);
+            qDebug()<<a<<"cloudflare";
+            QRegExp r("https://.*\.trycloudflare.com");
+            r.indexIn(a);
+            QString result= r.cap(0).mid(8);
+            this->cloudflaredlink=result;
+            ui->label_cloudflared->setText(result);
+            this->iscloudflaredlinkexists=true;
+        }
+    }
+   }
 }
 
 
@@ -114,14 +151,15 @@ void MainWindow::on_LaunchServerButton_clicked()
             qmes.exec();
             return;
         }
+
         Server& s=Data.Servers[CurrentServer()];
-        this->CommandLine_Server= new CommandLineController(&s,0);
+        this->CommandLine_Server= new CommandLineController();
+        this->CommandLine_Server->Command(&s,0);
         ui->LaunchServerButton->setText(tr("サーバーストップ"));
     }
     else{
         ui->LaunchServerButton->setText(tr("サーバー起動"));
         this->CommandLine_Server->kill();
-        remove("stdout.txt");
     }
     IsServerRunning=!IsServerRunning;
 }
@@ -136,29 +174,30 @@ int MainWindow::CurrentServer(){
 
 void MainWindow::on_pushButton_ClipBoard_clicked()
 {
-    DownloadManager* d=new DownloadManager();
-    d->downloadcloudflared();
-    //QtDownloadManager* qd=new QtDownloadManager();
-    //qd->setTarget("https://github.com/cloudflare/cloudflared/releases/latest/DownloadManager/cloudflared-windows-amd64.exe");
-    //qd->DownloadManager();
+    QClipboard* c= QApplication::clipboard();
+    c->setText(this->cloudflaredlink);
+    Forge* f=new Forge();
+    f->Get("latest");
 }
 
 void MainWindow::ClosedDelay(){
 
 }
-#include <QCloseEvent>
 void MainWindow::closeEvent (QCloseEvent *event)
 {
-    /*サーバーごとに設定しなおす---------------------------------------------
-    GUIOption g;
-    g.DiscordBotToken=ui->lineEdit_DiscordBotToken->text().toStdString();
-    g.DiscordChannelId=ui->lineEdit_DiscordChannelId->text().toStdString();
-    g.isCommandGuess=ui->checkBox_GuessCommand->isChecked();
-    */
+    QDir d("temp");
+    if(d.exists()){
+        d.removeRecursively();
+    }
+    QDir a;
+    a.mkdir("temp");
+
     SaveGUIOption();
     Data.langindex=ui->comboBox_lang->currentIndex();
     this->Data.Write();
+    this->CommandLine_cloudflared->kill();
     this->CommandLine_Server->kill();
+
 }
 
 
@@ -199,9 +238,8 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
 
     if(this->Data.Servers.empty()){return;}
     if(index==1){
-        qDebug()<<ui->comboBox_ServerProperties->count();
         if(ui->comboBox_ServerProperties->count()==0){
-        this->Data.Servers[CurrentServer()].ServerProperty.Load(Data.Servers[CurrentServer()].Directory);
+            this->Data.Servers[CurrentServer()].LoadProperties();
         ServerProperty sp= this->Data.Servers[CurrentServer()].ServerProperty;
             for(int i=0;i<sp.Properties.size();i++){
                 ui->comboBox_ServerProperties->addItem(QString::fromStdString(sp.Properties[i][0]));
@@ -239,9 +277,12 @@ void MainWindow::on_pushButton_Command_clicked()
 }
 
 void MainWindow::Command(){
+    /*if(this->Data.Servers[CurrentServer()].ServerProperty.Get("enable-rcon")!="true"){
+        return ErrorWindow(tr("RCONが有効でありません。サーバーのプロパティの「enable-rcon」をtrueにしてください。"));
+    }
     if(!this->IsrconStarted){
         return ErrorWindow(tr("RCONがまだ有効ではありません。起動するまで待ってください。"));
-    }
+    }*/
     QString command=ui->lineEdit_Command->text();
 
     if(rcon.isconnected){
@@ -249,11 +290,11 @@ void MainWindow::Command(){
         ui->lineEdit_Command->clear();
     }
     else{
-        this->Data.Servers[CurrentServer()].ServerProperty.Load(Data.Servers[CurrentServer()].Directory);
+        this->Data.Servers[CurrentServer()].LoadProperties();
         string e= this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
         QString enablercon=QString::fromStdString(e);
-        QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[37][1]);
-        QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[38][1]);
+        QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.password"));
+        QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.port"));
 
         if(enablercon!="true"){
             return ErrorWindow(tr("RCONが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。"));
@@ -267,8 +308,6 @@ void MainWindow::Command(){
         if(!is_ok){
             return ErrorWindow(tr("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかの整数を設定してください。\n初期値の25565をおすすめします。"));
         }
-        qDebug()<<"port";
-        qDebug()<<port;
         rcon.auth(rconpass.toStdString(),port);
     }
 }

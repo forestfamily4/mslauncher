@@ -21,14 +21,19 @@ void Data::Read(){
 
         QString name= settings->value("ServerName","").toString();
         QString dir= settings->value("Directory","").toString();
-
+        QString jar=settings->value("ServerJARFile","").toString();
         qDebug()<<name;
 
         Server* s=new Server(name,dir);
+
+        s->ServerJARFile=jar;
+
         GUIOption* g=new GUIOption();
+
         QString token= settings->value("DiscordBotToken","").toString();
         QString channel=settings->value("DiscordChannelId","").toString();
         bool guess=settings->value("CommandGuess",true).toBool();
+
         g->DiscordChannelId=channel;
         g->isCommandGuess=guess;
         g->DiscordBotToken=token;
@@ -59,6 +64,7 @@ void Data::Write(){
         settings->beginGroup("Server"+QString::number(i));
         settings->setValue("ServerName",s->ServerName);
         settings->setValue("Directory",s->Directory);
+        settings->setValue("ServerJARFile",s->ServerJARFile);
         //guioption
         GUIOption &g=s->GUIOptions;
         settings->setValue("DiscordBotToken",g.DiscordBotToken);

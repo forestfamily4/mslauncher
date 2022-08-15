@@ -18,10 +18,12 @@ class Server
 {
 public:
   Server(QString ServerName,QString Directory);
-  QString ServerName;
-  QString Directory;
+  QString ServerName="";
+  QString Directory="";
+  QString ServerJARFile="";
   ServerProperty ServerProperty;
    GUIOption GUIOptions;
+  void LoadProperties();
 };
 
 #endif // SERVER_H

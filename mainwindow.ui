@@ -19,7 +19,10 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0" colspan="4">
+    <item row="0" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBox_Servers"/>
+    </item>
+    <item row="2" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
@@ -49,7 +52,26 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_3"/>
+           <widget class="QLabel" name="label_cloudflared">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_ClipBoard">
@@ -97,6 +119,19 @@
            <widget class="QLineEdit" name="lineEdit_DiscordChannelId"/>
           </item>
           <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_Command">
             <property name="text">
              <string>コマンド送信</string>
@@ -130,7 +165,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>355</width>
-                 <height>252</height>
+                 <height>358</height>
                 </rect>
                </property>
                <layout class="QFormLayout" name="formLayout">
@@ -183,7 +218,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>354</width>
-                 <height>252</height>
+                 <height>358</height>
                 </rect>
                </property>
                <layout class="QFormLayout" name="formLayout_2">
@@ -204,7 +239,14 @@
            <widget class="QLineEdit" name="lineEdit_Command"/>
           </item>
           <item row="2" column="0">
-           <widget class="QTreeView" name="treeView"/>
+           <widget class="QTreeView" name="treeView">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>150</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -250,13 +292,6 @@
       </widget>
      </widget>
     </item>
-    <item row="0" column="3">
-     <widget class="QComboBox" name="comboBox_lang">
-      <property name="currentText">
-       <string/>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="2">
      <widget class="QPushButton" name="NewServerButton">
       <property name="text">
@@ -264,8 +299,19 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QComboBox" name="comboBox_Servers"/>
+    <item row="0" column="4">
+     <widget class="QComboBox" name="comboBox_lang">
+      <property name="currentText">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>サーバー削除</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

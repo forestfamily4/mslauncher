@@ -37,6 +37,8 @@ set(PROJECT_SOURCES
         icon.rc
         back/rcon.h back/rcon.cpp
         back/downloadmanager.h back/downloadmanager.cpp
+net/forge.h net/forge.cpp
+ui/comboboxwindow.h ui/comboboxwindow.cpp
 
         ${TS_FILES}
 )
