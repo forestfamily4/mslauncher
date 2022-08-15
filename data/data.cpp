@@ -50,7 +50,7 @@ void Data::Read(){
 }
 void Data::Write(){
     QSettings* settings=new QSettings("mslauncher.ini", QSettings::IniFormat);
-
+    settings->clear();
     this->ServerNum=this->Servers.size();
 
     settings->beginGroup("General");

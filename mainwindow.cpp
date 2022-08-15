@@ -59,7 +59,8 @@ void MainWindow::on_NewServerButton_clicked()
     delete s;
 
     ComboBoxWindow* c=new ComboBoxWindow(this,{"official","mohist","papermc","fabric","forge"});
-    c->setFixedSize(500,70);
+    c->setFixedSize(250,70);
+    c->setWindowFlag(Qt::WindowCloseButtonHint,false);
     c->setWindowTitle(tr("サーバーの種類を決めてください。"));
     c->show();
 }
@@ -353,5 +354,18 @@ void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
 {
     if(isfirst){return;}
     ErrorWindow("言語を変えるにはこのアプリを再起動する必要があります。\nYou need to restart this app to change the language.");
+}
+
+void MainWindow::on_pushButton_DeleteServer_clicked()
+{
+    vector<Server>& v=this->Data.Servers;
+    if(v.empty()){
+        return;
+    }
+    v.erase(cbegin(v) + CurrentServer());
+    ui->comboBox_Servers->clear();
+    for(int i=0;i<v.size();i++){
+        ui->comboBox_Servers->addItem(v[i].ServerName);
+    }
 }
 

@@ -21,5 +21,7 @@ ComboBoxWindow::ComboBoxWindow(QWidget *parent,QStringList str)
 
 void ComboBoxWindow::ok(){
     this->result=c->currentText();
+    this->hide();
     emit finish();
+    qDebug() << "cwindow finish";
 }
