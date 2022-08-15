@@ -8,7 +8,7 @@ It uses [cloudflared tunnel]("https://github.com/cloudflare/cloudflared").
 
 ## Getting Started 
 
-DownloadManager the launcher from the latest release!
+Download the launcher from the latest release!
 
 ## Features
 
