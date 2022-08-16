@@ -23,9 +23,9 @@ public:
 
 
     bool HasJava();
-    int Getos();//0 win 1 mac 2 linux
     void kill();
     void Command(Server* Server,int id,QString port="");
+    QString Command(QStringList command);
 private:
     QProcess* ThisProcess;
     void GenerateCMDFile(int id,Server Server,string filename,string& filenameresult);

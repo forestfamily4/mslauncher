@@ -38,7 +38,8 @@ set(PROJECT_SOURCES
         back/downloadmanager.h back/downloadmanager.cpp
 net/forge.h net/forge.cpp
 ui/comboboxwindow.h ui/comboboxwindow.cpp
-
+back/os.h back/os.cpp
+back/java.h back/java.cpp
         ${TS_FILES}
 )
 

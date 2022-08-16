@@ -13,20 +13,20 @@ void Data::Read(){
     this->langindex=settings->value("lang",0).toInt();
     this->DirHistory=settings->value("DirHistory","").toString();
     this->ServerNum=settings->value("ServerNum",0).toInt();
-    qDebug()<<ServerNum;
     settings->endGroup();
-
+    if(this->ServerNum==0){
+        return;
+    }
     for(int i=0;i<this->ServerNum;i++){
         settings->beginGroup("Server"+QString::number(i));
 
         QString name= settings->value("ServerName","").toString();
         QString dir= settings->value("Directory","").toString();
         QString jar=settings->value("ServerJARFile","").toString();
+        ServerType type=(ServerType)settings->value("ServerType","official").toInt();
         qDebug()<<name;
 
-        Server* s=new Server(name,dir);
-
-        s->ServerJARFile=jar;
+        Server* s=new Server(name,dir,jar,type);
 
         GUIOption* g=new GUIOption();
 
@@ -65,6 +65,7 @@ void Data::Write(){
         settings->setValue("ServerName",s->ServerName);
         settings->setValue("Directory",s->Directory);
         settings->setValue("ServerJARFile",s->ServerJARFile);
+        settings->setValue("ServerType",s->ServerType);
         //guioption
         GUIOption &g=s->GUIOptions;
         settings->setValue("DiscordBotToken",g.DiscordBotToken);

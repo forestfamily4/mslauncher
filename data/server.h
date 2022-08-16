@@ -14,16 +14,30 @@ using namespace std;
   QString DiscordChannelId;
 };
 typedef guiOption GUIOption;
+
+typedef enum
+{
+    official,
+    mohist,
+    spigot,
+    papermc,
+    fabric,
+    forge
+}ServerType;
+
+
 class Server
 {
 public:
-  Server(QString ServerName,QString Directory);
+  Server(QString ServerName,QString Directory,QString JarFile,::ServerType ServerType);
   QString ServerName="";
   QString Directory="";
   QString ServerJARFile="";
   ServerProperty ServerProperty;
+  ServerType ServerType;
    GUIOption GUIOptions;
   void LoadProperties();
+   void SetServerType(QString type);
 };
 
 #endif // SERVER_H

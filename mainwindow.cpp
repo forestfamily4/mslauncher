@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -13,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     timerId = startTimer(200);
     IsServerRunning=false;
-    this->os=CommandLine_Server->Getos();
+    this->os=os::Getos();
     ui->comboBox_lang->addItem("Language:日本語");
     ui->comboBox_lang->addItem("Language:English");
     DataRender(true);
@@ -49,7 +48,7 @@ void MainWindow::on_NewServerButton_clicked()
                                           | QFileDialog::DontResolveSymlinks);
     if(Directory==""){return;}
     Data.DirHistory=Directory;
-    Server* s=new Server(ServerName,Directory);
+    Server* s=new Server(ServerName,Directory,"server.jar",ServerType::official);
     Data.Servers.push_back(*s);
     vector<Server>& Servers=Data.Servers;
     ui->comboBox_Servers->clear();
@@ -58,14 +57,17 @@ void MainWindow::on_NewServerButton_clicked()
     }
     delete s;
 
-    ComboBoxWindow* c=new ComboBoxWindow(this,{"official","mohist","papermc","fabric","forge"});
-    c->setFixedSize(250,70);
-    c->setWindowFlag(Qt::WindowCloseButtonHint,false);
-    c->setWindowTitle(tr("サーバーの種類を決めてください。"));
-    c->show();
+    this->ServerTypeComobobox=new ComboBoxWindow(this,{"official","mohist","spigot","papermc","fabric","forge"});
+    connect(ServerTypeComobobox,SIGNAL(finished()),this,SLOT(ServerTypeComoboboxfinished()));
+    ServerTypeComobobox->setFixedSize(250,70);
+    ServerTypeComobobox->setWindowFlag(Qt::WindowCloseButtonHint,false);
+    ServerTypeComobobox->setWindowTitle(tr("サーバーの種類を決めてください。"));
+    ServerTypeComobobox->show();
 }
 
 void MainWindow::timerEvent(QTimerEvent *event){
+
+
     if(rcon.data.length()!=this->rcondatasize){
         ui->plainTextEdit_CommandResult->setPlainText(QString::fromStdString(rcon.data));
     }
@@ -129,7 +131,6 @@ void MainWindow::timerEvent(QTimerEvent *event){
         if(line.contains("Your quick Tunnel has been created!")){
             int index=line.indexOf("Your quick Tunnel has been created!");
             QString a=line.mid(index,300);
-            qDebug()<<a<<"cloudflare";
             QRegExp r("https://.*\.trycloudflare.com");
             r.indexIn(a);
             QString result= r.cap(0).mid(8);
@@ -159,6 +160,25 @@ void MainWindow::on_LaunchServerButton_clicked()
         ui->LaunchServerButton->setText(tr("サーバーストップ"));
     }
     else{
+        if(!java::hasjava())
+        {
+            if(os::Getos()==0){
+                QMessageBox e;
+                int Answer= QMessageBox::question(this,tr("確認"),tr("JDKがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJDKをインストールすることもできますが、どうしますか？"));
+                if(Answer==QMessageBox::Ok){
+                    java::download;
+                    return;
+                }
+                else{
+                    return;
+                }
+            }else{
+                return ErrorWindow(tr("JDKの存在が確かめられませんでした。"));
+            }
+
+        }
+
+
         ui->LaunchServerButton->setText(tr("サーバー起動"));
         this->CommandLine_Server->kill();
     }
@@ -177,8 +197,6 @@ void MainWindow::on_pushButton_ClipBoard_clicked()
 {
     QClipboard* c= QApplication::clipboard();
     c->setText(this->cloudflaredlink);
-    Forge* f=new Forge();
-    f->Get("latest");
 }
 
 void MainWindow::ClosedDelay(){
@@ -274,16 +292,14 @@ void MainWindow::finished(QNetworkReply *rep)
 
 void MainWindow::on_pushButton_Command_clicked()
 {
+
     Command();
 }
 
 void MainWindow::Command(){
-    /*if(this->Data.Servers[CurrentServer()].ServerProperty.Get("enable-rcon")!="true"){
-        return ErrorWindow(tr("RCONが有効でありません。サーバーのプロパティの「enable-rcon」をtrueにしてください。"));
+    if(this->Data.Servers.empty()){
+        return;
     }
-    if(!this->IsrconStarted){
-        return ErrorWindow(tr("RCONがまだ有効ではありません。起動するまで待ってください。"));
-    }*/
     QString command=ui->lineEdit_Command->text();
 
     if(rcon.isconnected){
@@ -296,7 +312,9 @@ void MainWindow::Command(){
         QString enablercon=QString::fromStdString(e);
         QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.password"));
         QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.port"));
-
+        if(!this->IsServerRunning){
+            return ErrorWindow(tr("サーバーが起動していません。"));
+        }
         if(enablercon!="true"){
             return ErrorWindow(tr("RCONが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。"));
         }
@@ -333,8 +351,11 @@ void MainWindow::SaveGUIOption(){
 
 
 void MainWindow::DataRender(bool isfirst){
+    if(this->Data.Servers.empty()){
+        return;
+    }
     vector<Server> ss=this->Data.Servers;
-    Server s=Server("","");
+    Server s=Server("","","",ServerType::official);
     if(!isfirst){
     s=ss[CurrentServer()];
     }
@@ -358,6 +379,14 @@ void MainWindow::on_comboBox_lang_currentIndexChanged(int index)
 
 void MainWindow::on_pushButton_DeleteServer_clicked()
 {
+    if(this->Data.Servers.empty()){
+        return;
+    }
+    QMessageBox e;
+    int Answer= QMessageBox::question(this,tr("確認"),tr("サーバーを本当に削除してもいいですか？この操作は取り消せません。"));
+    if(Answer==QMessageBox::No){
+        return;
+    }
     vector<Server>& v=this->Data.Servers;
     if(v.empty()){
         return;
@@ -369,3 +398,8 @@ void MainWindow::on_pushButton_DeleteServer_clicked()
     }
 }
 
+void MainWindow::ServerTypeComoboboxfinished(){
+    int a=this->Data.Servers.size()-1;
+    Server& s=this->Data.Servers[a];
+    s.SetServerType(this->ServerTypeComobobox->result);
+}

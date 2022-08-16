@@ -1,13 +1,14 @@
 #include "downloadmanager.h"
 #include "commandline.h"
 #include "qdir.h"
+#include "os.h"
 
 DownloadManager::DownloadManager() :
     QObject(0)
 {
 
     CommandLineController* c=new CommandLineController();
-    this->os=c->Getos();
+    this->os=os::Getos();
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(DownloadFinished(QNetworkReply*)));
 
     this->progresswindow=new QWidget();

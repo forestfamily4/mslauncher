@@ -10,6 +10,9 @@
 #include "back/downloadmanager.h"
 #include "net/forge.h"
 #include "ui/comboboxwindow.h"
+#include "back/os.h"
+#include "back/java.h"
+
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -59,6 +62,7 @@ private slots:
 
     void on_pushButton_DeleteServer_clicked();
 
+    void ServerTypeComoboboxfinished();
 private:
     Ui::MainWindow *ui;
     Data Data;
@@ -81,6 +85,9 @@ private:
     int rcondatasize=0;
     bool isfirst=true;
     bool iscloudflaredlinkexists=false;
+    ComboBoxWindow* ServerTypeComobobox;
+
+    QString test="";
 public:
     int CurrentServer();
     int timerId;
@@ -91,6 +98,8 @@ protected:
     QTimer* closedtimer;
     void ChangeServerToRender();
     bool IsServerRunning;
+
+
 
 };
 #endif // MAINWINDOW_H

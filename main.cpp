@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
     QTranslator translator;
     Data* d=new Data();
     d->Read();
-    qDebug()<<"dfaf";
-    qDebug()<<d->langindex;
+    qDebug()<<"load translate:"+d->langindex;
     if(d->langindex==0){
         translator.load("lang/ja");
     }

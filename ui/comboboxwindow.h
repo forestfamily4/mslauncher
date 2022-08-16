@@ -10,11 +10,12 @@ class ComboBoxWindow:public QDialog
     Q_OBJECT
 public:
     ComboBoxWindow(QWidget *parent = nullptr,QStringList str={""});
+
     QString result="";
 public slots:
     void ok();
 signals:
-    void finish();
+    void finished();
 
 private:
     QComboBox* c;

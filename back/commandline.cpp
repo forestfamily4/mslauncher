@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include "data/server.h"
-#include "stdio.h"
+#include "os.h"
 #include <stdlib.h>
 #include <QPromise>
 #include <QFuture>
@@ -33,7 +33,7 @@ void CommandLineController::GenerateCMDFile(int id,Server Server,string filename
     if(filename==""){
         return;
     }
-    if(Getos()==0){
+    if(os::Getos()==0){
         filename+=".bat";
     }
     else{
@@ -74,27 +74,28 @@ void CommandLineController::Command(Server* Server,int id,QString port){
     }
 }
 
+QString CommandLineController::Command(QStringList command){
+    ThisProcess=new QProcess();
+    ThisProcess->setWorkingDirectory(QDir::currentPath());
+    if(os::Getos()==0){
+        QString a=command[0];
+        command.remove(0);
+        ThisProcess->start(a,command);
+        ThisProcess->waitForFinished();
+        return QString::fromUtf8(ThisProcess->readAllStandardError()+ThisProcess->readAllStandardOutput());
+    }
+    else{
+        QString a=command[0];
+        command.remove(0);
+        ThisProcess->start(a,command);
+        return "";
+    }
+}
+
+
 void CommandLineController::kill(){
     if(isrunning){
         ThisProcess->kill();
     }
 
 }
-
-#ifdef Q_OS_WIN
-int CommandLineController::Getos(){//0 win 1 mac 2 linux 3 None
-    return 0;
-}
-#elif Q_OS_MACX
-int CommandLineController::Getos(){//0 win 1 mac 2 linux 3 None
-    return 1;
-}
-#elif Q_OS_LINUX
-int CommandLineController::Getos(){//0 win 1 mac 2 linux 3 None
-    return 2;
-}
-#else
-int CommandLineController::Getos(){//0 win 1 mac 2 linux 3 None
-    return 3;
-}
-#endif
