@@ -61,8 +61,6 @@ private slots:
     void on_comboBox_lang_currentIndexChanged(int index);
 
     void on_pushButton_DeleteServer_clicked();
-
-    void ServerTypeComoboboxfinished();
 private:
     Ui::MainWindow *ui;
     Data Data;

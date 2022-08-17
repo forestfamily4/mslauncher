@@ -13,6 +13,7 @@ void Data::Read(){
     this->langindex=settings->value("lang",0).toInt();
     this->DirHistory=settings->value("DirHistory","").toString();
     this->ServerNum=settings->value("ServerNum",0).toInt();
+    this->isJavainmslauncher=settings->value("isjavainmslauncher",false).toBool();
     settings->endGroup();
     if(this->ServerNum==0){
         return;
@@ -57,6 +58,7 @@ void Data::Write(){
     settings->setValue("lang",langindex);
     settings->setValue("DirHistory",DirHistory);
     settings->setValue("ServerNum",this->ServerNum);
+    settings->setValue("isjavainmslauncher",this->isJavainmslauncher);
     settings->endGroup();
 
     for(int i=0;i<Servers.size();i++){

@@ -58,7 +58,12 @@ void MainWindow::on_NewServerButton_clicked()
     delete s;
 
     this->ServerTypeComobobox=new ComboBoxWindow(this,{"official","mohist","spigot","papermc","fabric","forge"});
-    connect(ServerTypeComobobox,SIGNAL(finished()),this,SLOT(ServerTypeComoboboxfinished()));
+    //connect(ServerTypeComobobox,SIGNAL(finished()),this,SLOT(ServerTypeComoboboxfinished()));
+    connect(ServerTypeComobobox,&ComboBoxWindow::finished,[=](){
+        int a=this->Data.Servers.size()-1;
+        Server& s=this->Data.Servers[a];
+        s.SetServerType(this->ServerTypeComobobox->result);
+    });
     ServerTypeComobobox->setFixedSize(250,70);
     ServerTypeComobobox->setWindowFlag(Qt::WindowCloseButtonHint,false);
     ServerTypeComobobox->setWindowTitle(tr("サーバーの種類を決めてください。"));
@@ -166,7 +171,8 @@ void MainWindow::on_LaunchServerButton_clicked()
                 QMessageBox e;
                 int Answer= QMessageBox::question(this,tr("確認"),tr("JDKがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJDKをインストールすることもできますが、どうしますか？"));
                 if(Answer==QMessageBox::Ok){
-                    java::download;
+                    java::downloadjdk();
+                    this->Data.isJavainmslauncher=true;
                     return;
                 }
                 else{
@@ -197,6 +203,7 @@ void MainWindow::on_pushButton_ClipBoard_clicked()
 {
     QClipboard* c= QApplication::clipboard();
     c->setText(this->cloudflaredlink);
+    //java::downloadjdk();
 }
 
 void MainWindow::ClosedDelay(){
@@ -396,10 +403,4 @@ void MainWindow::on_pushButton_DeleteServer_clicked()
     for(int i=0;i<v.size();i++){
         ui->comboBox_Servers->addItem(v[i].ServerName);
     }
-}
-
-void MainWindow::ServerTypeComoboboxfinished(){
-    int a=this->Data.Servers.size()-1;
-    Server& s=this->Data.Servers[a];
-    s.SetServerType(this->ServerTypeComobobox->result);
 }

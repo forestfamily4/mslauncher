@@ -3,6 +3,7 @@
 #include <QRegExp>
 #include <QDir>
 #include "downloadmanager.h"
+#include "zip.h"
 
 java::java()
 {
@@ -36,7 +37,9 @@ QString java::version(){
 }
 void java::downloadjdk(){
     DownloadManager* d=new DownloadManager();
-    connect(d,SIGNAL(done()),this,SIGNAL(downloadedjava()));
+    connect(d,&DownloadManager::done,[=](){
+        zip::extract(QDir::currentPath()+"/java.zip",QDir::currentPath());
+    });
     d->FileDownload(QDir::currentPath(),"https://download.java.net/java/GA/jdk19/877d6127e982470ba2a7faa31cc93d04/35/GPL/openjdk-19_windows-x64_bin.zip","java.zip");
 }
 void java::downloadedjava(){

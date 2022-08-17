@@ -23,6 +23,7 @@ public:
     void Write();
     int langindex=0;
     QString DirHistory="";
+    bool isJavainmslauncher=false;
 private:
     int ServerNum=0;
 };

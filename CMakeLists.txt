@@ -40,6 +40,7 @@ net/forge.h net/forge.cpp
 ui/comboboxwindow.h ui/comboboxwindow.cpp
 back/os.h back/os.cpp
 back/java.h back/java.cpp
+back/zip.h back/zip.cpp
         ${TS_FILES}
 )
 
