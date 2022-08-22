@@ -4,7 +4,7 @@
 #include <QObject>
 #include <string>
 
-#include "data/server.h"
+#include "../data/server.h"
 #include <string>
 #include <iostream>
 #include <stdlib.h>

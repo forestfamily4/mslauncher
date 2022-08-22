@@ -136,7 +136,7 @@ void MainWindow::timerEvent(QTimerEvent *event){
         if(line.contains("Your quick Tunnel has been created!")){
             int index=line.indexOf("Your quick Tunnel has been created!");
             QString a=line.mid(index,300);
-            QRegExp r("https://.*\.trycloudflare.com");
+            QRegExp r("https://.*trycloudflare.com");
             r.indexIn(a);
             QString result= r.cap(0).mid(8);
             this->cloudflaredlink=result;
