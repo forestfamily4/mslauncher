@@ -29,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     QDir a;
     a.mkdir("temp");
 
+    ui->label_ServerDirectory->setText(Data.Servers[CurrentServer()].Directory);
+
+    ui->comboBox_ServerType->addItems({"official","mohist","spigot","paper","fabric","forge"});
+    ui->comboBox_ServerType->setCurrentIndex((int)Data.Servers[CurrentServer()].ServerType);
+    ui->comboBox_ServerType->setEnabled(false);
 }
 
 MainWindow::~MainWindow()

@@ -19,13 +19,34 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="4">
+     <widget class="QComboBox" name="comboBox_lang">
+      <property name="currentText">
+       <string/>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="2">
      <widget class="QComboBox" name="comboBox_Servers"/>
+    </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="pushButton_DeleteServer">
+      <property name="text">
+       <string>サーバー削除</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="NewServerButton">
+      <property name="text">
+       <string>新規サーバー</string>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -289,28 +310,49 @@
          </rect>
         </property>
        </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>90</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>サーバーのディレクトリー</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_ServerDirectory">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>130</y>
+          <width>351</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_ServerType">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>170</y>
+          <width>141</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="currentIndex">
+         <number>-1</number>
+        </property>
+       </widget>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="NewServerButton">
-      <property name="text">
-       <string>新規サーバー</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4">
-     <widget class="QComboBox" name="comboBox_lang">
-      <property name="currentText">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3">
-     <widget class="QPushButton" name="pushButton_DeleteServer">
-      <property name="text">
-       <string>サーバー削除</string>
-      </property>
      </widget>
     </item>
    </layout>
