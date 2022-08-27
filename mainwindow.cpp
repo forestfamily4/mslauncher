@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
     QDir a;
     a.mkdir("temp");
 
-    ui->label_ServerDirectory->setText(Data.Servers[CurrentServer()].Directory);
+    ui->label_ServerDirectory->setText(CurrentServer().Directory);
 
     ui->comboBox_ServerType->addItems({"official","mohist","spigot","paper","fabric","forge"});
-    ui->comboBox_ServerType->setCurrentIndex((int)Data.Servers[CurrentServer()].ServerType);
+    ui->comboBox_ServerType->setCurrentIndex((int)CurrentServer().ServerType);
     ui->comboBox_ServerType->setEnabled(false);
 }
 
@@ -99,7 +99,7 @@ void MainWindow::timerEvent(QTimerEvent *event){
                 //windowsのnotepad
                 if(this->os==0){
                     QProcess process;
-                    process.start("notepad.exe",{Data.Servers[CurrentServer()].Directory+"/eula.txt"});
+                    process.start("notepad.exe",{CurrentServer().Directory+"/eula.txt"});
                     process.waitForFinished();
                 }
 
@@ -119,7 +119,7 @@ void MainWindow::timerEvent(QTimerEvent *event){
                     }
                     this->CommandLine_cloudflared->kill();
                     this->CommandLine_cloudflared=new CommandLineController();
-                    Server& s=Data.Servers[CurrentServer()];
+                    Server s=CurrentServer();
                     s.LoadProperties();
                     string port=s.ServerProperty.Get("query.port");
                     this->CommandLine_cloudflared->Command(&s,1,QString::fromStdString(port));
@@ -156,6 +156,10 @@ void MainWindow::timerEvent(QTimerEvent *event){
 
 void MainWindow::on_LaunchServerButton_clicked()
 {
+    if(java::versionint()<17){
+        ErrorWindow(tr("javaのバージョンが低いためサーバーが起動できない可能性があります。JRE17以上のバージョンをおすすめします。"));
+    }
+
     if(!IsServerRunning){
         if(Data.Servers.empty()){
             QErrorMessage qmes;
@@ -164,12 +168,13 @@ void MainWindow::on_LaunchServerButton_clicked()
             return;
         }
 
-        Server& s=Data.Servers[CurrentServer()];
+        Server s=CurrentServer();
         this->CommandLine_Server= new CommandLineController();
         this->CommandLine_Server->Command(&s,0);
         ui->LaunchServerButton->setText(tr("サーバーストップ"));
     }
     else{
+        qDebug()<<"java"<<java::hasjava();
         if(!java::hasjava())
         {
             if(os::Getos()==0){
@@ -196,12 +201,12 @@ void MainWindow::on_LaunchServerButton_clicked()
     IsServerRunning=!IsServerRunning;
 }
 
-int MainWindow::CurrentServer(){
+Server MainWindow::CurrentServer(){
     int a=ui->comboBox_Servers->currentIndex();
     if(a<0){
         a=0;
     }
-    return a;
+    return Data.Servers[a];
 }
 
 void MainWindow::on_pushButton_ClipBoard_clicked()
@@ -270,8 +275,8 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
     if(this->Data.Servers.empty()){return;}
     if(index==1){
         if(ui->comboBox_ServerProperties->count()==0){
-            this->Data.Servers[CurrentServer()].LoadProperties();
-        ServerProperty sp= this->Data.Servers[CurrentServer()].ServerProperty;
+            this->CurrentServer().LoadProperties();
+        ServerProperty sp= this->CurrentServer().ServerProperty;
             for(int i=0;i<sp.Properties.size();i++){
                 ui->comboBox_ServerProperties->addItem(QString::fromStdString(sp.Properties[i][0]));
             }
@@ -283,15 +288,15 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
 
 void MainWindow::on_comboBox_ServerProperties_currentIndexChanged(int index)
 {
-    ui->lineEdit_ServerProperties->setText(QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Properties[index][1]));
+    ui->lineEdit_ServerProperties->setText(QString::fromStdString(this->CurrentServer().ServerProperty.Properties[index][1]));
 }
 
 
 void MainWindow::on_lineEdit_ServerProperties_textChanged(const QString &arg1)
 {
     if(this->Data.Servers.empty()){return;}
-    this->Data.Servers[CurrentServer()].ServerProperty.Properties[ui->comboBox_ServerProperties->currentIndex()][1]=arg1.toStdString();
-    this->Data.Servers[CurrentServer()].ServerProperty.Write(Data.Servers[CurrentServer()].Directory);
+    this->CurrentServer().ServerProperty.Properties[ui->comboBox_ServerProperties->currentIndex()][1]=arg1.toStdString();
+    this->CurrentServer().ServerProperty.Write(CurrentServer().Directory);
 }
 
 /*
@@ -319,11 +324,11 @@ void MainWindow::Command(){
         ui->lineEdit_Command->clear();
     }
     else{
-        this->Data.Servers[CurrentServer()].LoadProperties();
-        string e= this->Data.Servers[CurrentServer()].ServerProperty.Properties[8][1];
+        this->CurrentServer().LoadProperties();
+        string e= this->CurrentServer().ServerProperty.Properties[8][1];
         QString enablercon=QString::fromStdString(e);
-        QString rconpass= QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.password"));
-        QString rconport=QString::fromStdString(this->Data.Servers[CurrentServer()].ServerProperty.Get("rcon.port"));
+        QString rconpass= QString::fromStdString(this->CurrentServer().ServerProperty.Get("rcon.password"));
+        QString rconport=QString::fromStdString(this->CurrentServer().ServerProperty.Get("rcon.port"));
         if(!this->IsServerRunning){
             return ErrorWindow(tr("サーバーが起動していません。"));
         }
@@ -369,7 +374,7 @@ void MainWindow::DataRender(bool isfirst){
     vector<Server> ss=this->Data.Servers;
     Server s=Server("","","",ServerType::official);
     if(!isfirst){
-    s=ss[CurrentServer()];
+    s=CurrentServer();
     }
     else{
         s=ss[0];
@@ -403,9 +408,38 @@ void MainWindow::on_pushButton_DeleteServer_clicked()
     if(v.empty()){
         return;
     }
-    v.erase(cbegin(v) + CurrentServer());
+    v.erase(cbegin(v) + ui->comboBox_Servers->currentIndex());
     ui->comboBox_Servers->clear();
     for(int i=0;i<v.size();i++){
         ui->comboBox_Servers->addItem(v[i].ServerName);
     }
 }
+
+
+void MainWindow::on_pushButton_OpenDirectory_clicked()
+{
+    Server s=CurrentServer();
+    const QFileInfo fileInfo(s.Directory);
+    // Mac, Windows support folder or file.
+    if (os::Getos()==0) {
+
+        QStringList param;
+        if (!fileInfo.isDir())
+            param += QLatin1String("/select,");
+        param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
+        QProcess::startDetached("explorer", param);
+    } else if (os::Getos()==1) {
+        QStringList scriptArgs;
+        scriptArgs << QLatin1String("-e")
+                   << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+                          .arg(fileInfo.canonicalFilePath());
+        QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+        scriptArgs.clear();
+        scriptArgs << QLatin1String("-e")
+                   << QLatin1String("tell application \"Finder\" to activate");
+        QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    } else {
+        ErrorWindow(tr("対応していません。"));
+    }
+}
+

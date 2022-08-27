@@ -61,6 +61,8 @@ private slots:
     void on_comboBox_lang_currentIndexChanged(int index);
 
     void on_pushButton_DeleteServer_clicked();
+    void on_pushButton_OpenDirectory_clicked();
+
 private:
     Ui::MainWindow *ui;
     Data Data;
@@ -87,7 +89,7 @@ private:
 
     QString test="";
 public:
-    int CurrentServer();
+    Server CurrentServer();
     int timerId;
 protected:
     void timerEvent(QTimerEvent *event);

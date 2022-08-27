@@ -14,7 +14,7 @@ bool java::hasjava(){
     QString a=c->Command({"java","-version"});
     qDebug()<<a;
 
-    if(a.contains("64-Bit Server VM")&& a.toLower().contains("jdk")){
+    if(a.contains("64-Bit Server VM")&& a.toLower().contains("java")){
         return true;
     }
     else{
@@ -34,6 +34,16 @@ QString java::version(){
     QString result=Second.cap(0);
 
     return result;
+}
+int java::versionint(){
+    QString a=version();
+    qDebug()<<a;
+    QRegExp r("[0-9]");
+    int pos=0;
+    r.indexIn(a,pos);
+    pos+=r.matchedLength();
+    r.indexIn(a,pos);
+    return r.cap().toInt();
 }
 void java::downloadjdk(){
     DownloadManager* d=new DownloadManager();

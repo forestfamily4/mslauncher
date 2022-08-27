@@ -19,16 +19,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="4">
-     <widget class="QComboBox" name="comboBox_lang">
-      <property name="currentText">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QComboBox" name="comboBox_Servers"/>
-    </item>
     <item row="0" column="3">
      <widget class="QPushButton" name="pushButton_DeleteServer">
       <property name="text">
@@ -40,6 +30,16 @@
      <widget class="QPushButton" name="NewServerButton">
       <property name="text">
        <string>新規サーバー</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBox_Servers"/>
+    </item>
+    <item row="0" column="4">
+     <widget class="QComboBox" name="comboBox_lang">
+      <property name="currentText">
+       <string/>
       </property>
      </widget>
     </item>
@@ -328,7 +328,7 @@
          <rect>
           <x>20</x>
           <y>130</y>
-          <width>351</width>
+          <width>851</width>
           <height>20</height>
          </rect>
         </property>
@@ -350,6 +350,19 @@
         </property>
         <property name="currentIndex">
          <number>-1</number>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_OpenDirectory">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>90</y>
+          <width>111</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ディレクトリを開く</string>
         </property>
        </widget>
       </widget>

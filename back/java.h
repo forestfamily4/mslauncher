@@ -10,6 +10,7 @@ public:
     java();
     static bool hasjava();
     static QString version();
+    static int versionint();
     static void downloadjdk();
 public slots:
     void downloadedjava();
