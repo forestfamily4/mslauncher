@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_ServerType->addItems({"official","mohist","spigot","paper","fabric","forge"});
     ui->comboBox_ServerType->setCurrentIndex((int)CurrentServer().ServerType);
     ui->comboBox_ServerType->setEnabled(false);
+
+    java(Data.isJavainmslauncher);
 }
 
 MainWindow::~MainWindow()
@@ -156,10 +158,8 @@ void MainWindow::timerEvent(QTimerEvent *event){
 
 void MainWindow::on_LaunchServerButton_clicked()
 {
-    if(java::versionint()<17){
-        ErrorWindow(tr("javaのバージョンが低いためサーバーが起動できない可能性があります。JRE17以上のバージョンをおすすめします。"));
-    }
 
+    qDebug()<<java::versionint();
     if(!IsServerRunning){
         if(Data.Servers.empty()){
             QErrorMessage qmes;
@@ -167,34 +167,35 @@ void MainWindow::on_LaunchServerButton_clicked()
             qmes.exec();
             return;
         }
-
-        Server s=CurrentServer();
-        this->CommandLine_Server= new CommandLineController();
-        this->CommandLine_Server->Command(&s,0);
-        ui->LaunchServerButton->setText(tr("サーバーストップ"));
-    }
-    else{
-        qDebug()<<"java"<<java::hasjava();
-        if(!java::hasjava())
+        bool test=java::hasjava();
+        if(!test)
         {
             if(os::Getos()==0){
                 QMessageBox e;
-                int Answer= QMessageBox::question(this,tr("確認"),tr("JDKがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJDKをインストールすることもできますが、どうしますか？"));
-                if(Answer==QMessageBox::Ok){
+                int Answer= QMessageBox::question(this,tr("確認"),tr("Javaがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJREをインストールすることもできますが、どうしますか？"));
+                qDebug()<<Answer<<"Anser";
+                if(Answer==QMessageBox::Yes){
                     java::downloadjdk();
-                    this->Data.isJavainmslauncher=true;
+                    this->Data.SetisJavainmslauncher(true);
                     return;
                 }
                 else{
                     return;
                 }
             }else{
-                return ErrorWindow(tr("JDKの存在が確かめられませんでした。"));
+                return ErrorWindow(tr("Javaの存在が確かめられませんでした。"));
             }
 
         }
-
-
+        if(java::versionint()<17){
+            ErrorWindow(tr("javaのバージョンが低いためサーバーが起動できない可能性があります。JRE17以上のバージョンをおすすめします。"));
+        }
+        Server s=CurrentServer();
+        this->CommandLine_Server= new CommandLineController();
+        this->CommandLine_Server->Command(&s,0);
+        ui->LaunchServerButton->setText(tr("サーバーストップ"));
+    }
+    else{
         ui->LaunchServerButton->setText(tr("サーバー起動"));
         this->CommandLine_Server->kill();
     }
@@ -282,7 +283,7 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
             }
         }
     }
-
+    ui->checkBox_isjavainmslauncher->setChecked(Data.isJavainmslauncher);
 }
 
 
@@ -361,8 +362,6 @@ void MainWindow::on_lineEdit_Command_returnPressed()
 
 void MainWindow::SaveGUIOption(){
    GUIOption &g= Data.Servers[ServerIndex].GUIOptions;
-    g.DiscordBotToken=ui->lineEdit_DiscordBotToken->text();
-   g.DiscordChannelId=ui->lineEdit_DiscordChannelId->text();
     g.isCommandGuess=ui->checkBox_GuessCommand->isChecked();
 }
 
@@ -383,8 +382,6 @@ void MainWindow::DataRender(bool isfirst){
     GUIOption g=s.GUIOptions;
 
 
-    ui->lineEdit_DiscordBotToken->setText(g.DiscordBotToken);
-    ui->lineEdit_DiscordChannelId->setText(g.DiscordChannelId);
     ui->checkBox_GuessCommand->setChecked(g.isCommandGuess);
 }
 
@@ -441,5 +438,11 @@ void MainWindow::on_pushButton_OpenDirectory_clicked()
     } else {
         ErrorWindow(tr("対応していません。"));
     }
+}
+
+
+void MainWindow::on_checkBox_isjavainmslauncher_stateChanged(int arg1)
+{
+    Data.SetisJavainmslauncher(ui->checkBox_isjavainmslauncher->isChecked());
 }
 

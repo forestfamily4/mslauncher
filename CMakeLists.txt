@@ -36,7 +36,9 @@ set(PROJECT_SOURCES
         icon.rc
         back/rcon.h back/rcon.cpp
         back/downloadmanager.h back/downloadmanager.cpp
-net/forge.h net/forge.cpp
+servertype/forge.h servertype/forge.cpp
+
+
 ui/comboboxwindow.h ui/comboboxwindow.cpp
 back/os.h back/os.cpp
 back/java.h back/java.cpp

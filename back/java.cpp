@@ -4,17 +4,20 @@
 #include <QDir>
 #include "downloadmanager.h"
 #include "zip.h"
+#include <QProgressDialog>
+#include <QRegularExpression>
 
-java::java()
+bool java::isjavainmslauncher;
+
+java::java(bool isjavainms)
 {
-
+    isjavainmslauncher=isjavainms;
 }
 bool java::hasjava(){
     CommandLineController* c=new CommandLineController();
-    QString a=c->Command({"java","-version"});
-    qDebug()<<a;
-
-    if(a.contains("64-Bit Server VM")&& a.toLower().contains("java")){
+    QString a=c->Command({javapath(),"-version"});
+    qDebug()<<a<<"javalog"<<a.toLower().contains("jdk");
+    if(a.toLower().contains("java")||a.toLower().contains("jdk")){
         return true;
     }
     else{
@@ -23,35 +26,72 @@ bool java::hasjava(){
 }
 QString java::version(){
     CommandLineController* c=new CommandLineController();
-    QString a=c->Command({"java","-version"});
+    QString a=c->Command({javapath(),"-version"});
+    qDebug()<<"thinking";
+    if(a.contains("open")){
 
-    QRegExp b("(java version \"|openjdk version \"|openjdk |java )[0-9]*\.[0-9]*\.[0-9]*");
-    b.indexIn(a);
-    QString d=b.cap(0);
+        QRegExp b("\"[0-9]+\"");
+        b.indexIn(a);
+        QString r=b.cap(0);
+        qDebug()<<"thinking"<<r;
+        r.chop(1);
+        r=r.mid(1);
+        return r;
+    }
+    else{
 
-    QRegExp Second("[0-9]+\.[0-9]+\.[0-9]+");
-    Second.indexIn(d);
-    QString result=Second.cap(0);
+        QRegExp b("version \"[0-9]*\.[0-9]*\.[0-9]*");
+        b.indexIn(a);
+        QString d=b.cap(0);
 
-    return result;
+        QRegExp Second("[0-9]+\.[0-9]+\.[0-9]+");
+        Second.indexIn(d);
+        QString result=Second.cap(0);
+
+        if(result.mid(1,1)=="\."){
+            return result.mid(2,1);
+        }
+        else{
+            return result.mid(0,2);
+        }
+    }
 }
 int java::versionint(){
     QString a=version();
     qDebug()<<a;
-    QRegExp r("[0-9]");
-    int pos=0;
-    r.indexIn(a,pos);
-    pos+=r.matchedLength();
-    r.indexIn(a,pos);
-    return r.cap().toInt();
+    return a.toInt();
+
 }
 void java::downloadjdk(){
+    qDebug()<<"thinking";
     DownloadManager* d=new DownloadManager();
     connect(d,&DownloadManager::done,[=](){
         zip::extract(QDir::currentPath()+"/java.zip",QDir::currentPath());
+        QFile a("java.zip");
+        a.remove();
+        QDir dir(QDir::currentPath());
+        QStringList l=dir.entryList();
+        l=l.filter(QRegularExpression("(java|jdk).*"));
+        qDebug()<< l<<"thinki";
+        if(l.empty()){
+            return;
+        }
+        QString r=l.first();
+        dir.rename(QDir::currentPath()+"/"+r,QDir::currentPath()+"/"+"java");
     });
+
     d->FileDownload(QDir::currentPath(),"https://download.java.net/java/GA/jdk19/877d6127e982470ba2a7faa31cc93d04/35/GPL/openjdk-19_windows-x64_bin.zip","java.zip");
+
+
 }
 void java::downloadedjava(){
     //
+}
+QString java::javapath(){
+    if(isjavainmslauncher){
+        return QDir::currentPath()+"/java/bin/java";
+    }
+    else{
+        return "java";
+    }
 }

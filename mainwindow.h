@@ -8,7 +8,7 @@
 #include "back/commandline.h"
 #include "back/rcon.h"
 #include "back/downloadmanager.h"
-#include "net/forge.h"
+#include "servertype/forge.h"
 #include "ui/comboboxwindow.h"
 #include "back/os.h"
 #include "back/java.h"
@@ -62,6 +62,8 @@ private slots:
 
     void on_pushButton_DeleteServer_clicked();
     void on_pushButton_OpenDirectory_clicked();
+
+    void on_checkBox_isjavainmslauncher_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;

@@ -6,8 +6,6 @@ Server::Server(QString ServerName, QString Directory,QString JarFile,::ServerTyp
 {
   this->ServerName = ServerName;
   this->Directory = Directory;
-  this->GUIOptions.DiscordBotToken="";
-  this->GUIOptions.DiscordChannelId="";
   this->GUIOptions.isCommandGuess=true;
   this->ServerJARFile=JarFile;
   this->ServerType=ServerType;

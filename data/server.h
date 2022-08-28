@@ -10,8 +10,6 @@ using namespace std;
 {
  public:
     bool isCommandGuess;
-  QString DiscordBotToken;
-  QString DiscordChannelId;
 };
 typedef guiOption GUIOption;
 

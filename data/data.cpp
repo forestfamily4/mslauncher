@@ -1,5 +1,6 @@
 #include "data.h"
 #include <QTextCodec>
+#include "back/java.h"
 
 Data::Data()
 {
@@ -35,9 +36,7 @@ void Data::Read(){
         QString channel=settings->value("DiscordChannelId","").toString();
         bool guess=settings->value("CommandGuess",true).toBool();
 
-        g->DiscordChannelId=channel;
         g->isCommandGuess=guess;
-        g->DiscordBotToken=token;
         settings->endGroup();
         s->GUIOptions=*g;
         this->Servers.push_back(*s);
@@ -70,11 +69,13 @@ void Data::Write(){
         settings->setValue("ServerType",s->ServerType);
         //guioption
         GUIOption &g=s->GUIOptions;
-        settings->setValue("DiscordBotToken",g.DiscordBotToken);
-        settings->setValue("DiscordChannelId",g.DiscordChannelId);
         settings->setValue("CommandGuess",g.isCommandGuess);
 
         settings->endGroup();
     }
     settings->sync();
+}
+void Data::SetisJavainmslauncher(bool a){
+    this->isJavainmslauncher=a;
+    java::isjavainmslauncher=a;
 }

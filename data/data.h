@@ -24,6 +24,7 @@ public:
     int langindex=0;
     QString DirHistory="";
     bool isJavainmslauncher=false;
+    void SetisJavainmslauncher(bool a);
 private:
     int ServerNum=0;
 };
