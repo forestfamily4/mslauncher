@@ -1,4 +1,6 @@
 windeployqt mslauncher.exe
+windeployqt msconnect.exe
+
 rd /s /q iconengines
 rd /s /q imageformats
 rd /s /q translations

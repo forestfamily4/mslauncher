@@ -60,7 +60,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>cloudlfaredurl</string>
+     <string>cloudflaredurl</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
