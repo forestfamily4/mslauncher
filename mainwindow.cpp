@@ -28,13 +28,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
     QDir a;
     a.mkdir("temp");
-
-    ui->label_ServerDirectory->setText(CurrentServer().Directory);
-
+    if(!Data.Servers.empty()){
+        ui->label_ServerDirectory->setText(Data.Servers[0].Directory);
+        ui->comboBox_ServerType->setCurrentIndex((int)CurrentServer().ServerType);
+    }
     ui->comboBox_ServerType->addItems({"official","mohist","spigot","paper","fabric","forge"});
-    ui->comboBox_ServerType->setCurrentIndex((int)CurrentServer().ServerType);
     ui->comboBox_ServerType->setEnabled(false);
-
     java(Data.isJavainmslauncher);
 }
 
@@ -190,6 +189,21 @@ void MainWindow::on_LaunchServerButton_clicked()
         if(java::versionint()<17){
             ErrorWindow(tr("javaのバージョンが低いためサーバーが起動できない可能性があります。JRE17以上のバージョンをおすすめします。"));
         }
+
+        if(os::Getos()==0){
+            if(!QFile("cloudflared.exe").exists()){
+                DownloadManager* d=new DownloadManager();
+                d->downloadcloudflared();
+            }
+        }
+        else{
+            CommandLineController* c =new CommandLineController();
+            QString a=c->Command({"cloudflared"});
+            if(a==""){
+                return ErrorWindow(tr("cloudflaredがインストールされていません。"));
+            }
+        }
+
         Server s=CurrentServer();
         this->CommandLine_Server= new CommandLineController();
         this->CommandLine_Server->Command(&s,0);
@@ -209,7 +223,9 @@ Server MainWindow::CurrentServer(){
     }
     return Data.Servers[a];
 }
-
+int MainWindow::CurrentServerIndex(){
+    return ui->comboBox_Servers->currentIndex();
+}
 void MainWindow::on_pushButton_ClipBoard_clicked()
 {
     QClipboard* c= QApplication::clipboard();
@@ -276,10 +292,12 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
     if(this->Data.Servers.empty()){return;}
     if(index==1){
         if(ui->comboBox_ServerProperties->count()==0){
-            this->CurrentServer().LoadProperties();
-        ServerProperty sp= this->CurrentServer().ServerProperty;
+            Server s=this->CurrentServer();
+            s.LoadProperties();
+        ServerProperty sp= s.ServerProperty;
             for(int i=0;i<sp.Properties.size();i++){
-                ui->comboBox_ServerProperties->addItem(QString::fromStdString(sp.Properties[i][0]));
+            QString a=QString::fromStdString(sp.Properties[i][0]);
+                ui->comboBox_ServerProperties->addItem(a);
             }
         }
     }
@@ -289,15 +307,28 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
 
 void MainWindow::on_comboBox_ServerProperties_currentIndexChanged(int index)
 {
-    ui->lineEdit_ServerProperties->setText(QString::fromStdString(this->CurrentServer().ServerProperty.Properties[index][1]));
+    Server s=this->CurrentServer();
+    s.LoadProperties();
+    ui->lineEdit_ServerProperties->setText(QString::fromStdString(s.ServerProperty.Properties[index][1]));
 }
 
+void MainWindow::on_comboBox_ServerProperties_currentTextChanged(const QString &arg1)
+{
+
+}
 
 void MainWindow::on_lineEdit_ServerProperties_textChanged(const QString &arg1)
 {
+
+}
+
+void MainWindow::on_pushButton_SaveProperty_clicked()
+{
     if(this->Data.Servers.empty()){return;}
-    this->CurrentServer().ServerProperty.Properties[ui->comboBox_ServerProperties->currentIndex()][1]=arg1.toStdString();
-    this->CurrentServer().ServerProperty.Write(CurrentServer().Directory);
+    Server& s=Data.Servers[CurrentServerIndex()];
+    s.LoadProperties();
+    s.ServerProperty.Properties[s.ServerProperty.GetIndex(ui->comboBox_ServerProperties->currentText().toStdString())][1]=ui->lineEdit_ServerProperties->text().toStdString();
+    s.ServerProperty.Write(CurrentServer().Directory);
 }
 
 /*
@@ -325,11 +356,11 @@ void MainWindow::Command(){
         ui->lineEdit_Command->clear();
     }
     else{
-        this->CurrentServer().LoadProperties();
-        string e= this->CurrentServer().ServerProperty.Properties[8][1];
-        QString enablercon=QString::fromStdString(e);
-        QString rconpass= QString::fromStdString(this->CurrentServer().ServerProperty.Get("rcon.password"));
-        QString rconport=QString::fromStdString(this->CurrentServer().ServerProperty.Get("rcon.port"));
+        Server s=CurrentServer();
+        s.LoadProperties();
+        QString enablercon=QString::fromStdString(s.ServerProperty.Get("enable-rcon"));
+        QString rconpass= QString::fromStdString(s.ServerProperty.Get("rcon.password"));
+        QString rconport=QString::fromStdString(s.ServerProperty.Get("rcon.port"));
         if(!this->IsServerRunning){
             return ErrorWindow(tr("サーバーが起動していません。"));
         }
@@ -344,6 +375,9 @@ void MainWindow::Command(){
 
         if(!is_ok){
             return ErrorWindow(tr("サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかの整数を設定してください。\n初期値の25565をおすすめします。"));
+        }
+        if(!this->IsrconStarted){
+            return ErrorWindow(tr("RCONがまだ有効になっていません。もう少し待ってください。"));
         }
         rcon.auth(rconpass.toStdString(),port);
     }
@@ -415,6 +449,9 @@ void MainWindow::on_pushButton_DeleteServer_clicked()
 
 void MainWindow::on_pushButton_OpenDirectory_clicked()
 {
+    if(Data.Servers.empty()){
+        return;
+    }
     Server s=CurrentServer();
     const QFileInfo fileInfo(s.Directory);
     // Mac, Windows support folder or file.
@@ -445,4 +482,8 @@ void MainWindow::on_checkBox_isjavainmslauncher_stateChanged(int arg1)
 {
     Data.SetisJavainmslauncher(ui->checkBox_isjavainmslauncher->isChecked());
 }
+
+
+
+
 

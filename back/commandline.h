@@ -8,8 +8,6 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
-#include <QPromise>
-#include <QFuture>
 #include <QProcess>
 
 using namespace std;

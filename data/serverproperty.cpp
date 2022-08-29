@@ -22,6 +22,7 @@ void ServerProperty::Load(QString Directory){
         if(linebuffer.find('=')!=std::string::npos){
             vector<string> v=split(linebuffer,'=');
             if(v.size()==1){v.push_back("");}
+            qDebug()<<"loading property"<<QString::fromStdString(v[0]);
             Properties.push_back(v);}
          i+=1;
     }
@@ -65,4 +66,12 @@ string ServerProperty::Get(string key){
         }
     }
     return "none";
+}
+int ServerProperty::GetIndex(string key){
+    for(int i=0;i<this->Properties.size();i++){
+        if(key==this->Properties[i][0]){
+            return i;
+        }
+    }
+    return 0;
 }

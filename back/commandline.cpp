@@ -4,13 +4,9 @@
 #include "data/server.h"
 #include "os.h"
 #include <stdlib.h>
-#include <QPromise>
-#include <QFuture>
 #include <QProcess>
 #include <QDir>
 #include <fstream>
-#include <QThread>
-#include <QtConcurrent/QtConcurrent>
 #include "java.h"
 using namespace std;
 

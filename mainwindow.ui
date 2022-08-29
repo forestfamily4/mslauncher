@@ -46,7 +46,7 @@
     <item row="2" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -338,6 +338,19 @@
         </property>
         <property name="text">
          <string>mslauncher内のJavaを使用する</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_SaveProperty">
+        <property name="geometry">
+         <rect>
+          <x>720</x>
+          <y>10</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>プロパティ保存</string>
         </property>
        </widget>
       </widget>

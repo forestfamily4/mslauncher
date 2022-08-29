@@ -14,6 +14,7 @@ public:
     void Load(QString Directory);
     void Write(QString Directory);
     string Get(string key);
+    int GetIndex(string key);
 private:
     vector<string> split(const string &s, char delim);
 };

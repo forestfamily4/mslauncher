@@ -88,6 +88,7 @@ target_link_libraries(mslauncher PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(mslauncher PRIVATE Qt6::Network)
 find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
 target_link_libraries(mslauncher PRIVATE Qt6::Core5Compat)
+
 set_target_properties(mslauncher PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

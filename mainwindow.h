@@ -65,6 +65,10 @@ private slots:
 
     void on_checkBox_isjavainmslauncher_stateChanged(int arg1);
 
+    void on_comboBox_ServerProperties_currentTextChanged(const QString &arg1);
+
+    void on_pushButton_SaveProperty_clicked();
+
 private:
     Ui::MainWindow *ui;
     Data Data;
@@ -92,6 +96,7 @@ private:
     QString test="";
 public:
     Server CurrentServer();
+    int CurrentServerIndex();
     int timerId;
 protected:
     void timerEvent(QTimerEvent *event);
