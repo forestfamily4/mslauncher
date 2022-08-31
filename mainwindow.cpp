@@ -35,6 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_ServerType->addItems({"official","mohist","spigot","paper","fabric","forge"});
     ui->comboBox_ServerType->setEnabled(false);
     java(Data.isJavainmslauncher);
+
+
+    
+    
 }
 
 MainWindow::~MainWindow()
