@@ -1,9 +1,5 @@
 #include "serverproperty.h"
-#include <string>
-using namespace std;
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include <QDir>
 
 ServerProperty::ServerProperty()
 {
@@ -13,53 +9,35 @@ ServerProperty::ServerProperty()
 
 
 void ServerProperty::Load(QString Directory){
-    std::ifstream stdoutfile;
-    stdoutfile.open((Directory+"/server.properties").toStdString());
-    string linebuffer="";
-    int i=0;
+    QFile file(Directory+"/server.properties");
+    file.open(QIODevice::ReadOnly);
+    QString s=file.readAll();
     Properties.clear();
-    while(getline(stdoutfile,linebuffer,'\n')){
-        if(linebuffer.find('=')!=std::string::npos){
-            vector<string> v=split(linebuffer,'=');
-            if(v.size()==1){v.push_back("");}
-            qDebug()<<"loading property"<<QString::fromStdString(v[0]);
-            Properties.push_back(v);}
-         i+=1;
-    }
-    stdoutfile.close();
-}
+    QStringList a=s.split("\n");
 
-void ServerProperty::Write(QString Directory){
-    ofstream file;
-    file.open((Directory+"/server.properties").toStdString(), std::ios::out);
-
-    string result="";
-
-    for(int i=0;i<this->Properties.size();i++){
-        if(i==this->Properties.size()-1){
-            result+=Properties[i][0]+"="+Properties[i][1];
-        }
-        else{
-         result+=Properties[i][0]+"="+Properties[i][1]+"\n";
+    for(int i=0;i<a.size();i++){
+        if(a[i].contains("=")){
+            QStringList b=a[i].split("=");
+            vector<QString> c;
+            c.push_back(b[0]);
+            c.push_back(b[1]);
+            Properties.push_back(c);
         }
     }
-    file<<result<<endl;
+
     file.close();
 }
 
-vector<string> ServerProperty:: split(const string &s, char delim) {
-    vector<string> elems;
-    stringstream ss(s);
-    string item;
-    while (getline(ss, item, delim)) {
-        if (!item.empty()) {
-            elems.push_back(item);
-        }
+void ServerProperty::Write(QString Directory){
+    QFile file(Directory+"/server.properties");
+    file.open(QIODevice::WriteOnly);
+    for(int i=0;i<Properties.size();i++){
+        file.write((Properties[i][0]+"="+Properties[i][1]+"\n").toUtf8());
     }
-    return elems;
+    file.close();
 }
 
-string ServerProperty::Get(string key){
+QString ServerProperty::Get(QString key){
     for(int i=0;i<this->Properties.size();i++){
         if(key==this->Properties[i][0]){
             return this->Properties[i][1];
@@ -67,7 +45,8 @@ string ServerProperty::Get(string key){
     }
     return "none";
 }
-int ServerProperty::GetIndex(string key){
+
+int ServerProperty::GetIndex(QString key){
     for(int i=0;i<this->Properties.size();i++){
         if(key==this->Properties[i][0]){
             return i;

@@ -126,8 +126,8 @@ void MainWindow::timerEvent(QTimerEvent *event){
                     this->CommandLine_cloudflared=new CommandLineController();
                     Server s=CurrentServer();
                     s.LoadProperties();
-                    string port=s.ServerProperty.Get("query.port");
-                    this->CommandLine_cloudflared->Command(&s,1,QString::fromStdString(port));
+                    QString port=s.ServerProperty.Get("query.port");
+                    this->CommandLine_cloudflared->Command(&s,1,port);
                 }
             }
 
@@ -300,7 +300,7 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
             s.LoadProperties();
         ServerProperty sp= s.ServerProperty;
             for(int i=0;i<sp.Properties.size();i++){
-            QString a=QString::fromStdString(sp.Properties[i][0]);
+            QString a=sp.Properties[i][0];
                 ui->comboBox_ServerProperties->addItem(a);
             }
         }
@@ -313,7 +313,7 @@ void MainWindow::on_comboBox_ServerProperties_currentIndexChanged(int index)
 {
     Server s=this->CurrentServer();
     s.LoadProperties();
-    ui->lineEdit_ServerProperties->setText(QString::fromStdString(s.ServerProperty.Properties[index][1]));
+    ui->lineEdit_ServerProperties->setText(s.ServerProperty.Properties[index][1]);
 }
 
 void MainWindow::on_comboBox_ServerProperties_currentTextChanged(const QString &arg1)
@@ -331,7 +331,7 @@ void MainWindow::on_pushButton_SaveProperty_clicked()
     if(this->Data.Servers.empty()){return;}
     Server& s=Data.Servers[CurrentServerIndex()];
     s.LoadProperties();
-    s.ServerProperty.Properties[s.ServerProperty.GetIndex(ui->comboBox_ServerProperties->currentText().toStdString())][1]=ui->lineEdit_ServerProperties->text().toStdString();
+    s.ServerProperty.Properties[s.ServerProperty.GetIndex(ui->comboBox_ServerProperties->currentText())][1]=ui->lineEdit_ServerProperties->text();
     s.ServerProperty.Write(CurrentServer().Directory);
 }
 
@@ -362,9 +362,9 @@ void MainWindow::Command(){
     else{
         Server s=CurrentServer();
         s.LoadProperties();
-        QString enablercon=QString::fromStdString(s.ServerProperty.Get("enable-rcon"));
-        QString rconpass= QString::fromStdString(s.ServerProperty.Get("rcon.password"));
-        QString rconport=QString::fromStdString(s.ServerProperty.Get("rcon.port"));
+        QString enablercon=(s.ServerProperty.Get("enable-rcon"));
+        QString rconpass= (s.ServerProperty.Get("rcon.password"));
+        QString rconport=(s.ServerProperty.Get("rcon.port"));
         if(!this->IsServerRunning){
             return ErrorWindow(tr("サーバーが起動していません。"));
         }

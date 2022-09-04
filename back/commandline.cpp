@@ -53,7 +53,7 @@ void CommandLineController::Command(Server* Server,int id,QString port){
     isrunning=true;
     QDateTime q;
     this->stdoutfilepath=QDir::currentPath()+"/temp/stdout"+QString::number(rand())+q.currentDateTime().toString("hhmmss") +".txt";
-
+    
 
     if(id==0){
         isrunning=true;
@@ -105,5 +105,5 @@ void CommandLineController::kill(){
     if(isrunning){
         ThisProcess->kill();
     }
-
+    
 }
