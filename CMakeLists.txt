@@ -31,7 +31,6 @@ set(PROJECT_SOURCES
         data/data.h
         data/server.h data/server.cpp
         data/serverproperty.h data/serverproperty.cpp
-        back/discordsrv.h back/discordsrv.cpp
         back/commandline.h back/commandline.cpp
         icon.rc
         back/rcon.h back/rcon.cpp
