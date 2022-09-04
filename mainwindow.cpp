@@ -97,7 +97,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
     if (rcon.data.length() != this->rcondatasize)
     {
-        ui->label_CommandResult->setText(QString::fromStdString(rcon.data));
+        ui->label_CommandResult->setText(rcon.data);
         scrolllate=true;
     }
     this->rcondatasize = rcon.data.length();
@@ -403,7 +403,7 @@ void MainWindow::Command()
 
     if (rcon.isconnected)
     {
-        rcon.cmd(command.toStdString());
+        rcon.cmd(command);
         ui->lineEdit_Command->clear();
     }
     else
@@ -436,7 +436,7 @@ void MainWindow::Command()
         {
             return ErrorWindow(tr("RCONがまだ有効になっていません。もう少し待ってください。"));
         }
-        rcon.auth(rconpass.toStdString(), port);
+        rcon.auth(rconpass, port);
     }
 }
 

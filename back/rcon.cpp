@@ -5,7 +5,7 @@ rcon::rcon(QObject *parent)
     : QObject{parent}
 {
 }
-void rcon::auth(string password, int port)
+void rcon::auth(QString password, int port)
 {
     this->tcpSocket = new QTcpSocket(this);
     connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(closeConnection()));
@@ -18,17 +18,17 @@ void rcon::auth(string password, int port)
     isconnected = false;
     tcpSocket->write(packetbuild(3, password));
 }
-void rcon::cmd(string cmd)
+void rcon::cmd(QString cmd)
 {
     tcpSocket->write(packetbuild(2, cmd));
 }
-QByteArray rcon::packetbuild(qint32 packettype, string s)
+QByteArray rcon::packetbuild(qint32 packettype, QString s)
 {
     QByteArray id;
     id.append((const char *)&pid, sizeof(pid));
     QByteArray ptype;
     ptype.append((const char *)&packettype, sizeof(packettype));
-    QByteArray strbody = QString::fromStdString(s).toUtf8();
+    QByteArray strbody = s.toUtf8();
     char empty = '\x00';
     qint32 length = 4 + 4 + strbody.length() + 2;
     QByteArray l;
@@ -78,7 +78,7 @@ void rcon::receiveData()
     qDebug() << rcv_data;
     if (isconnected)
     {
-        data += rcv_data.toStdString();
+        data += rcv_data;
         data += "\n";
     }
 }

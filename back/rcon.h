@@ -12,10 +12,10 @@ public:
     explicit rcon(QObject *parent = nullptr);
 
 public:
-    void auth(string password, int port);
-    void cmd(string cmd);
+    void auth(QString password, int port);
+    void cmd(QString cmd);
     bool isconnected = false;
-    string data = "";
+    QString data = "";
 private slots:
     void receiveData();
     void error();
@@ -23,7 +23,7 @@ private slots:
 
 private:
     QTcpSocket *tcpSocket;
-    QByteArray packetbuild(qint32 packettype, string s);
+    QByteArray packetbuild(qint32 packettype, QString s);
     qint32 pid;
 signals:
 };
