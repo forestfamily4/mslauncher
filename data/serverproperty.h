@@ -15,8 +15,6 @@ public:
     void Write(QString Directory);
     QString Get(QString key);
     int GetIndex(QString key);
-private:
-    vector<string> split(const QString &s, char delim);
 };
 
 #endif // SERVERPROPERTY_H
