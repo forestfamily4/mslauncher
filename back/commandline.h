@@ -16,17 +16,18 @@ class CommandLineController
 {
 public:
     CommandLineController();
-    QString stdoutfilepath="";
-    bool isrunning=false;
-
+    QString stdoutfilepath = "";
+    bool isrunning = false;
 
     bool HasJava();
     void kill();
-    void Command(Server* Server,int id,QString port="");
+    void RunCloudflared(QString port);
+    void RunServer(Server *Server);
     QString Command(QStringList command);
+
 private:
-    QProcess* ThisProcess;
-    void GenerateCMDFile(int id,Server Server,string filename,string& filenameresult);
+    QProcess *ThisProcess;
+    void GenerateCMDFile(int id, Server Server, string filename, string &filenameresult);
 };
 
 #endif // COMMANDLINE_H

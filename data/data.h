@@ -21,12 +21,13 @@ public:
     vector<Server> Servers;
     void Read();
     void Write();
-    int langindex=0;
-    QString DirHistory="";
-    bool isJavainmslauncher=false;
+    int langindex = 0;
+    QString DirHistory = "";
+    bool isJavainmslauncher = false;
     void SetisJavainmslauncher(bool a);
+
 private:
-    int ServerNum=0;
+    int ServerNum = 0;
 };
 
 #endif // DATA_H

@@ -13,7 +13,6 @@
 #include "back/os.h"
 #include "back/java.h"
 
-
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QInputDialog>
@@ -26,9 +25,13 @@
 #include <QRegExp>
 #include <QClipboard>
 #include <QCloseEvent>
+#include <QScrollbar>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui
+{
+    class MainWindow;
+}
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -61,6 +64,7 @@ private slots:
     void on_comboBox_lang_currentIndexChanged(int index);
 
     void on_pushButton_DeleteServer_clicked();
+    
     void on_pushButton_OpenDirectory_clicked();
 
     void on_checkBox_isjavainmslauncher_stateChanged(int arg1);
@@ -72,43 +76,41 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Data Data;
-    CommandLineController* CommandLine_Server;
-    CommandLineController* CommandLine_cloudflared;
-    int os=0;
+    CommandLineController *CommandLine_Server;
+    CommandLineController *CommandLine_cloudflared;
+    int os = 0;
     rcon rcon;
-    QString cloudflaredlink="";
-
+    QString cloudflaredlink = "";
 
     void Command();
     void ErrorWindow(QString info);
     void SaveGUIOption();
     void DataRender(bool isfirst);
 
-    //temp value
-    int ServerIndex=0;
-    int stdoutFileSize=0;
-    bool IsrconStarted=false;
-    int rcondatasize=0;
-    bool isfirst=true;
-    bool iscloudflaredlinkexists=false;
-    ComboBoxWindow* ServerTypeComobobox;
+    // temp value
+    int ServerIndex = 0;
+    int stdoutFileSize = 0;
+    bool IsrconStarted = false;
+    int rcondatasize = 0;
+    bool isfirst = true;
+    bool iscloudflaredlinkexists = false;
+    ComboBoxWindow *ServerTypeComobobox;
+    bool scrolllate;//scrollするときの一時的
+    bool scrolllate2;//scrollするときの一時的
 
-    QString test="";
+    QString test = "";
+
 public:
-    Server CurrentServer();
+    Server *CurrentServer();
     int CurrentServerIndex();
     int timerId;
+
 protected:
     void timerEvent(QTimerEvent *event);
     void closeEvent(QCloseEvent *bar);
     void ClosedDelay();
-    QTimer* closedtimer;
+    QTimer *closedtimer;
     void ChangeServerToRender();
     bool IsServerRunning;
-
-
-
 };
 #endif // MAINWINDOW_H
-
-

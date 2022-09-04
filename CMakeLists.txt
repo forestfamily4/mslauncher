@@ -37,7 +37,7 @@ set(PROJECT_SOURCES
         back/rcon.h back/rcon.cpp
         back/downloadmanager.h back/downloadmanager.cpp
 servertype/forge.h servertype/forge.cpp
-
+servertype/serverrun.h servertype/serverrun.cpp
 
 ui/comboboxwindow.h ui/comboboxwindow.cpp
 back/os.h back/os.cpp

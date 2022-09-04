@@ -2,5 +2,4 @@
 
 DiscordSRV::DiscordSRV()
 {
-
 }

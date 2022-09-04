@@ -8,7 +8,7 @@ class zip
 {
 public:
     zip();
-    static void extract(QString path,QString parentpath);
+    static void extract(QString path, QString parentpath);
 };
 
 #endif // ZIP_H

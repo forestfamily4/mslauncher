@@ -1,7 +1,6 @@
 #ifndef DISCORDSRV_H
 #define DISCORDSRV_H
 
-
 class DiscordSRV
 {
 public:

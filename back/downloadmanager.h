@@ -13,36 +13,37 @@
 #include <QEventLoop>
 
 using namespace std;
-class DownloadManager:public QObject
+class DownloadManager : public QObject
 {
     Q_OBJECT
 public:
     explicit DownloadManager();
     ~DownloadManager();
+
 public:
-    bool isdownloading=false;
+    bool isdownloading = false;
     void downloadcloudflared();
+
 private:
-    QProgressBar* progressbar;
-    QWidget* progresswindow;
+    QProgressBar *progressbar;
+    QWidget *progresswindow;
 
     QString dir;
     QUrl url;
     QString filename;
     int os;
 
-
 private:
     QByteArray downloadedData() const;
     QNetworkAccessManager manager;
     QString target;
 
-    signals:
+signals:
     void done();
 
 public slots:
-    void FileDownload(QString dir,QString url,QString filename,bool downloadingdialog=true);
-    void DownloadFinished(QNetworkReply* data);
+    void FileDownload(QString dir, QString url, QString filename, bool downloadingdialog = true);
+    void DownloadFinished(QNetworkReply *data);
     void DownloadProgress(qint64 recieved, qint64 total);
 };
 

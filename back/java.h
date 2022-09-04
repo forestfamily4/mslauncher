@@ -3,7 +3,7 @@
 #include <QString>
 #include <QObject>
 
-class java:public QObject
+class java : public QObject
 {
     Q_OBJECT
 public:

@@ -46,7 +46,7 @@
     <item row="2" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -73,24 +73,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_cloudflared">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>50</height>
-             </size>
-            </property>
+           <widget class="QTextEdit" name="textEditcloudflaredlink">
             <property name="maximumSize">
              <size>
-              <width>150</width>
-              <height>16777215</height>
+              <width>140</width>
+              <height>100</height>
              </size>
             </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::AutoText</enum>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -147,7 +138,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>367</width>
+                 <width>362</width>
                  <height>358</height>
                 </rect>
                </property>
@@ -200,15 +191,21 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>367</width>
+                 <width>361</width>
                  <height>358</height>
                 </rect>
                </property>
                <layout class="QFormLayout" name="formLayout_2">
-                <item row="0" column="0" colspan="2">
-                 <widget class="QPlainTextEdit" name="plainTextEdit_CommandResult">
-                  <property name="plainText">
+                <item row="0" column="1">
+                 <widget class="QLabel" name="label_CommandResult">
+                  <property name="text">
                    <string>コマンドの結果を表示します。</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>

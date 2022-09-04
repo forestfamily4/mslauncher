@@ -4,15 +4,16 @@
 #include <QFile>
 #include <QRegExp>
 #include <QDir>
-class Forge: public QObject
+class Forge : public QObject
 {
     Q_OBJECT
 public:
     Forge();
     void Get(QString ver);
-    QString link="";
+    QString link = "";
+
 private:
-    QString tempfile="";
+    QString tempfile = "";
 signals:
     void done();
 private slots:
