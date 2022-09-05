@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_EN">
+<TS version="2.1" language="en">
 <context>
     <name>DownloadManager</name>
     <message>
@@ -12,7 +12,7 @@
         <location filename="../../back/downloadmanager.cpp" line="94"/>
         <source>
 ダウンロードしています...</source>
-        <translation>downloading task has finished...</translation>
+        <translation type="unfinished">downloading...</translation>
     </message>
 </context>
 <context>
@@ -51,12 +51,12 @@
     <message>
         <location filename="../../mainwindow.ui" line="324"/>
         <source>ディレクトリを開く</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Open directory</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="337"/>
         <source>mslauncher内のJavaを使用する</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Use Java included in mslauncher.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DiscordSRV&lt;/p&gt;&lt;p&gt;Botのtoken&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -99,17 +99,17 @@
     <message>
         <location filename="../../mainwindow.ui" line="282"/>
         <source>サーバーのディレクトリー</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Server directory</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="350"/>
         <source>プロパティ保存</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save properties.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="25"/>
         <source>サーバー削除</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Remove server.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="50"/>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="81"/>
         <source>サーバーの種類を決めてください。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Server type is not valid.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="139"/>
@@ -146,17 +146,17 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../../mainwindow.cpp" line="203"/>
         <source>Javaがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJREをインストールすることもできますが、どうしますか？</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Please check Java is installed in your pc and environment settings are correct.(It will take few minutes to reflect.) Or you can install JRE in your mslauncher folder.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="218"/>
         <source>Javaの存在が確かめられませんでした。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">We cannot check if the Java is exists.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="223"/>
         <source>javaのバージョンが低いためサーバーが起動できない可能性があります。JRE17以上のバージョンをおすすめします。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">You are using lower version of java, and we will not be able to launch server.We recommend JRE17 or higher.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="240"/>
