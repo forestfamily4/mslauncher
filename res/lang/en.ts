@@ -20,7 +20,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="14"/>
         <source>mslauncher</source>
-        <translation></translation>
+        <translation type="unfinished">mslauncher</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="32"/>
@@ -161,7 +161,8 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../../mainwindow.cpp" line="240"/>
         <source>cloudflaredがインストールされていません。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+cloudflared is not installed.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="247"/>
@@ -171,12 +172,12 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../../mainwindow.cpp" line="437"/>
         <source>RCONがまだ有効になっていません。もう少し待ってください。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RCON is still invalid. Please wait.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="549"/>
         <source>対応していません。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">This does not support.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="203"/>
@@ -193,28 +194,29 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../../mainwindow.cpp" line="418"/>
         <source>サーバーが起動していません。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Server does not launched.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="422"/>
         <source>RCONが有効になっていません。serverのpropertiesの「enable-rcon」をtrueにしてください。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RCON in not valid.
+Please change the value to true in &quot;serveer properties&quot;.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="426"/>
         <source>RCONのパスワードが空白です。serverのpropertiesの「rcon-password」に何らかのパスワードを設定してください。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RCON password is blank. Plaese set the password for RCON located in server properties.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="433"/>
         <source>サーバーのポートがある整数型にあてはまりません。serverのpropertiesの「rcon-port」に何らかの整数を設定してください。
 初期値の25565をおすすめします。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Server port must be integer. Plaese set INTeger for rcon-POrt. Its default value is 25565.(recommend)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="499"/>
         <source>サーバーを本当に削除してもいいですか？この操作は取り消せません。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Are you sure to delete this server? This cannot undo.</translation>
     </message>
     <message>
         <source>RCONがまだ有効ではありません。起動するまで待ってください。</source>
@@ -239,7 +241,7 @@ Change it to &quot;EULA=true&quot;, and restart the server.</translation>
     <message>
         <location filename="../../back/rcon.cpp" line="74"/>
         <source>RCON接続できました。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RCON connection succeeded.</translation>
     </message>
 </context>
 </TS>
