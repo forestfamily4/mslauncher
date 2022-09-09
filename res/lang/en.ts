@@ -194,7 +194,7 @@ cloudflared is not installed.</translation>
     <message>
         <location filename="../../mainwindow.cpp" line="418"/>
         <source>サーバーが起動していません。</source>
-        <translation type="unfinished">Server does not launched.</translation>
+        <translation type="unfinished">Server is not launched.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="422"/>
