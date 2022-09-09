@@ -17,7 +17,6 @@ bool java::hasjava()
 {
     CommandLineController *c = new CommandLineController();
     QString a = c->Command({javapath(), "-version"});
-    qDebug() << a << "javalog" << a.toLower().contains("jdk");
     if (a.toLower().contains("java") || a.toLower().contains("jdk"))
     {
         return true;
@@ -31,7 +30,6 @@ QString java::version()
 {
     CommandLineController *c = new CommandLineController();
     QString a = c->Command({javapath(), "-version"});
-    qDebug() << "thinking";
     if (a.contains("open"))
     {
         QRegExp b("[0-9]+");
@@ -45,11 +43,9 @@ QString java::version()
         QRegExp b("version \"[0-9]*\.[0-9]*\.[0-9]*");
         b.indexIn(a);
         QString d = b.cap(0);
-        qDebug()<<d;
         QRegExp Second("[0-9]+\.[0-9]+\.[0-9]+");
         Second.indexIn(d);
         QString result = Second.cap(0);
-        qDebug()<<result<<"ha";
         if (result.mid(1, 1) == "\.")
         {
             return result.mid(2, 1);
@@ -63,12 +59,10 @@ QString java::version()
 int java::versionint()
 {
     QString a = version();
-    qDebug() << a;
     return a.toInt();
 }
 void java::downloadjdk()
 {
-    qDebug() << "thinking";
     DownloadManager *d = new DownloadManager();
     connect(d, &DownloadManager::done, [=]()
             {

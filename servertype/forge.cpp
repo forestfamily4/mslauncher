@@ -34,5 +34,4 @@ void Forge::Downloadedhtml()
     QString s = r.cap(0);
     link = s;
     emit done();
-    qDebug() << link;
 }

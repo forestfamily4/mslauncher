@@ -27,7 +27,6 @@ public:
 
 private:
     QProcess *ThisProcess;
-    void GenerateCMDFile(int id, Server Server, string filename, string &filenameresult);
 };
 
 #endif // COMMANDLINE_H

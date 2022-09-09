@@ -28,7 +28,6 @@ void Data::Read()
         QString dir = settings->value("Directory", "").toString();
         QString jar = settings->value("ServerJARFile", "").toString();
         ServerType type = (ServerType)settings->value("ServerType", "official").toInt();
-        qDebug() << name;
 
         Server *s = new Server(name, dir, jar, type);
 

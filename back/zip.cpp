@@ -12,5 +12,4 @@ void zip::extract(QString path, QString parentpath)
     p->setArguments({"x", "-y", "-o" + parentpath, path});
     p->start();
     p->waitForFinished();
-    qDebug() << p->readAllStandardOutput();
 }

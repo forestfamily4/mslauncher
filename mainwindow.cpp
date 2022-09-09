@@ -117,7 +117,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 r.indexIn(a);
                 QString result = r.cap(0).mid(8);
                 this->cloudflaredlink = result;
-                qDebug()<<result<<"clink";
                 ui->textEditcloudflaredlink->setText(result);
                 this->iscloudflaredlinkexists = true;
             }
@@ -132,7 +131,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
             if (stdoutFileSize != line.length())
             {
+                stdoutFileSize = line.length();
                 this->scrolllate2=true;
+                qDebug("testtest");
                 if (line.contains("You need to agree to the EULA"))
                 {
                     QErrorMessage qmes;
@@ -173,7 +174,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 }
             }
 
-            stdoutFileSize = line.length();
             f.close();
         }
 
@@ -184,7 +184,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 void MainWindow::on_LaunchServerButton_clicked()
 {
 
-    qDebug() << java::versionint();
+    qDebug() <<"java version:" <<java::versionint();
     if (!IsServerRunning)
     {
         if (Data.Servers.empty())
@@ -201,7 +201,6 @@ void MainWindow::on_LaunchServerButton_clicked()
             {
                 QMessageBox e;
                 int Answer = QMessageBox::question(this, tr("確認"), tr("Javaがインストールされていない、もしくは環境変数の設定がうまくいってないようです。(環境変数を変えたばかりだと反映されない可能性があります。) mslauncherのフォルダにそのままJREをインストールすることもできますが、どうしますか？"));
-                qDebug() << Answer << "Anser";
                 if (Answer == QMessageBox::Yes)
                 {
                     java::downloadjdk();

@@ -12,7 +12,6 @@ void rcon::auth(QString password, int port)
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(receiveData()));
     // connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error()));
     pid = rand();
-    qDebug() << pid;
     tcpSocket->connectToHost("localhost", port);
     tcpSocket->waitForConnected();
     isconnected = false;
@@ -36,13 +35,11 @@ QByteArray rcon::packetbuild(qint32 packettype, QString s)
     QByteArray result = l + id + ptype + strbody;
     result.append(empty);
     result.append(empty);
-    qDebug() << result;
     return result;
 }
 
 void rcon::receiveData()
 {
-    qDebug("データを受け取っています");
     QByteArray rcv_bytes = tcpSocket->readAll();
 
     if (this->isconnected)
@@ -74,8 +71,6 @@ void rcon::receiveData()
         rcv_data = tr("RCON接続できました。");
     }
     cout << "test" << endl;
-    qDebug() << rcv_bytes;
-    qDebug() << rcv_data;
     if (isconnected)
     {
         data += rcv_data;
@@ -85,7 +80,6 @@ void rcon::receiveData()
 
 void rcon::closeConnection()
 {
-    qDebug("close: close conn");
     isconnected = false;
     data = "";
 }

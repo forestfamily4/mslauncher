@@ -61,7 +61,6 @@ void DownloadManager::FileDownload(QString dir,QString url,QString filename,bool
 void DownloadManager::DownloadFinished(QNetworkReply *data) {
 
     this->progressbar->setFormat(tr("ファイルを書き込んでいます...."));
-    qDebug()<<this->dir+"/"+this->filename;
     QFile localFile(this->dir+"/"+this->filename);
     if (!localFile.open(QIODevice::WriteOnly))
         return;
@@ -75,7 +74,6 @@ void DownloadManager::DownloadFinished(QNetworkReply *data) {
 
 
 void DownloadManager::DownloadProgress(qint64 recieved, qint64 total) {
-    qDebug() << recieved << total;
     double a=recieved;
     double b=total;
     double division=(a/b)*100;

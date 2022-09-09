@@ -52,10 +52,8 @@ QString CommandLineController::Command(QStringList command){
     if(os::Getos()==0){
         /*
         if(QDir(QDir::currentPath()+"/java/bin").exists()){
-            qDebug()<<"add env";
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("PATH", env.value("Path") +";"+QDir::toNativeSeparators(QDir::currentPath())+"\\java\\bin");
-            qDebug()<<env.value("PATH");
             ThisProcess->setProcessEnvironment(env);
         }
         */

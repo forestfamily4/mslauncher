@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QDir>
 #include <fstream>
+#include "servertype/serverrun.h"
 #include "java.h"
 using namespace std;
 
@@ -17,33 +18,6 @@ bool CommandLineController::HasJava()
 {
     return true;
 }
-void CommandLineController::GenerateCMDFile(int id, Server Server, string filename, string &filenameresult)
-{
-    std::ofstream file;
-    string content = "";
-    if (id == 0)
-    { // BuildServer
-        content += "cd " + Server.Directory.toStdString();
-        content += "\n java -Xmx1024M -Xms1024M -jar server.jar nogui";
-    }
-
-    if (filename == "")
-    {
-        return;
-    }
-    if (os::Getos() == 0)
-    {
-        filename += ".bat";
-    }
-    else
-    {
-        filename += ".sh";
-    }
-    filenameresult = filename;
-    file.open(filename);
-    file << content << endl;
-    file.close();
-}
 
 /**
  *id
@@ -53,6 +27,7 @@ void CommandLineController::GenerateCMDFile(int id, Server Server, string filena
 
 void CommandLineController::RunServer(Server *Server)
 {
+    //args= {"-jar", "-Xmx1024M", "-Xms1024M", "nogui"}
     //  if(Server->ServerType)
     QDateTime q;
     this->stdoutfilepath = QDir::currentPath() + "/temp/stdout" + QString::number(rand()) + q.currentDateTime().toString("hhmmss") + ".txt";
@@ -60,7 +35,10 @@ void CommandLineController::RunServer(Server *Server)
     ThisProcess = new QProcess();
     ThisProcess->setStandardOutputFile(stdoutfilepath);
     ThisProcess->setWorkingDirectory(Server->Directory);
-    ThisProcess->start(java::javapath(), {"-jar", "-Xmx1024M", "-Xms1024M", Server->ServerJARFile, "nogui"});
+    ServerRun *s=new ServerRun();
+    QStringList args= s->GetArgs(Server->ServerType,Server->Directory,Server->ServerJARFile);
+    qDebug()<<args;
+    ThisProcess->start(java::javapath(),args);
 }
 
 QString CommandLineController::Command(QStringList command)
@@ -71,10 +49,8 @@ QString CommandLineController::Command(QStringList command)
     {
         /*
         if(QDir(QDir::currentPath()+"/java/bin").exists()){
-            qDebug()<<"add env";
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("PATH", env.value("Path") +";"+QDir::toNativeSeparators(QDir::currentPath())+"\\java\\bin");
-            qDebug()<<env.value("PATH");
             ThisProcess->setProcessEnvironment(env);
         }
         */
